@@ -9,230 +9,110 @@
 <meta name="theme-color" content="#0a1628">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="favicon.ico">
 <title>Bass Vision</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a1628;
-    --bg2: #0f1f38;
-    --bg3: #162944;
-    --accent: #1d9e75;
-    --accent2: #ff8c00;
-    --text: #e8edf5;
-    --text2: #8fa3bc;
-    --border: rgba(255,255,255,0.08);
-    --card: rgba(255,255,255,0.04);
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bot: env(safe-area-inset-bottom, 0px);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; overflow: hidden; }
-
-  /* ── Shell ── */
-  #shell { display: flex; flex-direction: column; height: 100%; }
-  #topbar {
-    padding: calc(var(--safe-top) + 12px) 16px 12px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    flex-shrink: 0; z-index: 10;
-  }
-  .app-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 1px; color: var(--text); }
-  .app-title span { color: var(--accent); }
-  #navbar {
-    display: flex; background: var(--bg); border-top: 1px solid var(--border);
-    padding-bottom: var(--safe-bot); flex-shrink: 0;
-  }
-  .nav-btn {
-    flex: 1; padding: 10px 4px 8px; background: none; border: none; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    font-family: 'Barlow', sans-serif; font-size: 10px; color: var(--text2);
-    transition: color 0.2s;
-  }
-  .nav-btn.active { color: var(--accent); }
-  .nav-btn svg { width: 22px; height: 22px; }
-  #content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-
-  /* ── Pages ── */
-  .page { display: none; padding: 16px 16px calc(16px + var(--safe-bot)); min-height: 100%; }
-  .page.active { display: block; }
-
-  /* ── Cards ── */
-  .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 14px 16px; margin-bottom: 12px;
-  }
-  .card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600;
-    letter-spacing: 1.2px; text-transform: uppercase; color: var(--text2); margin-bottom: 12px; }
-
-  /* ── Drop zone ── */
-  .drop-zone {
-    border: 1.5px dashed rgba(29,158,117,0.4); border-radius: 12px;
-    padding: 24px 16px; text-align: center; cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .drop-zone:active, .drop-zone.drag { background: rgba(29,158,117,0.08); border-color: var(--accent); }
-  .drop-zone-icon { width: 36px; height: 36px; margin: 0 auto 10px; opacity: 0.5; }
-  .drop-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .drop-sub { font-size: 12px; color: var(--text2); }
-
-  /* ── Mode toggle ── */
-  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .mode-btn {
-    padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px;
-    background: var(--card); cursor: pointer; text-align: left; font-family: 'Barlow', sans-serif;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .mode-btn.active { border-color: var(--accent); background: rgba(29,158,117,0.12); }
-  .mode-btn-title { font-size: 13px; font-weight: 500; color: var(--text); }
-  .mode-btn-sub { font-size: 11px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
-
-  /* ── Sampler canvas ── */
-  #samplerCanvas {
-    width: 100%; display: block; border-radius: 10px; border: 1px solid var(--border);
-    cursor: crosshair; max-height: 280px; object-fit: contain; background: #000;
-  }
-  .tol-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-  .swatch-preview { width: 20px; height: 20px; border-radius: 5px; border: 1px solid var(--border); flex-shrink: 0; }
-
-  /* ── Sliders & Selects ── */
-  .ctrl-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .ctrl-row:last-child { margin-bottom: 0; }
-  .ctrl-label { font-size: 13px; color: var(--text2); min-width: 80px; }
-  .ctrl-val { font-size: 13px; font-weight: 500; color: var(--text); min-width: 40px; text-align: right; }
-  input[type=range] {
-    flex: 1; -webkit-appearance: none; appearance: none; height: 4px;
-    background: var(--bg3); border-radius: 2px; outline: none;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
-    background: var(--accent); cursor: pointer; border: 2px solid var(--bg);
-  }
-  select {
-    flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-    color: var(--text); font-family: 'Barlow', sans-serif; font-size: 13px; padding: 8px 10px;
-    -webkit-appearance: none; appearance: none; outline: none;
-  }
-
-  /* ── Results ── */
-  .results-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
-  .result-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
-  .result-canvas { width: 100%; display: block; aspect-ratio: 1; background: #111; }
-  .result-label { padding: 6px 8px; }
-  .result-title { font-size: 11px; font-weight: 500; color: var(--text); }
-  .result-sub { font-size: 10px; color: var(--text2); margin-top: 1px; }
-  .dl-btn {
-    display: block; width: 100%; text-align: center; font-size: 11px; padding: 6px 0;
-    border-top: 1px solid var(--border); color: var(--accent); cursor: pointer;
-    background: none; border-left: none; border-right: none; border-bottom: none;
-    font-family: 'Barlow', sans-serif; font-weight: 500;
-  }
-  .dl-btn:active { background: rgba(29,158,117,0.1); }
-
-  /* ── Badges ── */
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .badge {
-    font-size: 11px; padding: 3px 9px; border-radius: 20px;
-    background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border);
-  }
-  .badge.ok { background: rgba(29,158,117,0.15); color: #4ecda0; border-color: rgba(29,158,117,0.3); }
-  .badge.warn { background: rgba(255,140,0,0.15); color: #ffaa44; border-color: rgba(255,140,0,0.3); }
-  .badge.info { background: rgba(29,100,200,0.15); color: #7ab8ff; border-color: rgba(29,100,200,0.3); }
-
-  /* ── Library ── */
-  .lib-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .lib-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
-  .icon-btn {
-    width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border);
-    background: var(--card); cursor: pointer; display: flex; align-items: center; justify-content: center;
-    color: var(--text2);
-  }
-  .icon-btn:active { background: rgba(255,255,255,0.1); }
-  .lib-empty { text-align: center; padding: 48px 24px; color: var(--text2); }
-  .lib-empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
-  .lib-empty-text { font-size: 15px; font-weight: 500; color: var(--text2); }
-  .lib-empty-sub { font-size: 13px; color: var(--text2); opacity: 0.6; margin-top: 6px; }
-  .lib-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-  .lib-item {
-    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-    background: var(--card); cursor: pointer; position: relative;
-  }
-  .lib-item:active { opacity: 0.8; }
-  .lib-img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #111; }
-  .lib-name { padding: 8px 10px 4px; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .lib-meta { padding: 0 10px 8px; font-size: 11px; color: var(--text2); }
-  .lib-del {
-    position: absolute; top: 6px; right: 6px; width: 26px; height: 26px;
-    background: rgba(0,0,0,0.6); border-radius: 50%; border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; color: #fff;
-  }
-
-  /* ── Add to library modal ── */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100;
-    display: flex; align-items: flex-end; justify-content: center;
-    padding-bottom: var(--safe-bot);
-  }
-  .modal-overlay.hidden { display: none; }
-  .modal {
-    background: var(--bg2); border: 1px solid var(--border); border-radius: 18px 18px 0 0;
-    width: 100%; max-width: 500px; padding: 20px 16px 24px;
-  }
-  .modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
-  .modal input[type=text] {
-    width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text); font-family: 'Barlow', sans-serif; font-size: 15px; padding: 10px 12px; outline: none;
-    margin-bottom: 12px;
-  }
-  .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .btn-cancel {
-    padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card);
-    color: var(--text2); font-family: 'Barlow', sans-serif; font-size: 15px; cursor: pointer;
-  }
-  .btn-save {
-    padding: 12px; border: none; border-radius: 10px; background: var(--accent);
-    color: #fff; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer;
-  }
-
-  /* ── Save to library btn ── */
-  .save-lib-btn {
-    width: 100%; padding: 12px; margin-top: 12px; border-radius: 10px;
-    border: 1px solid rgba(29,158,117,0.4); background: rgba(29,158,117,0.1);
-    color: var(--accent); font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 500;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
-  .save-lib-btn:active { background: rgba(29,158,117,0.2); }
-
-  /* ── Install banner ── */
-  #installBanner {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-    background: var(--bg2); border-top: 1px solid var(--border);
-    padding: 14px 16px calc(14px + var(--safe-bot));
-    display: flex; align-items: center; gap: 12px;
-  }
-  #installBanner.hidden { display: none; }
-  .install-text { flex: 1; font-size: 13px; color: var(--text2); line-height: 1.4; }
-  .install-text strong { color: var(--text); display: block; margin-bottom: 2px; }
-  .install-btn {
-    padding: 9px 16px; background: var(--accent); border: none; border-radius: 8px;
-    color: #fff; font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
-  }
-  .install-close {
-    width: 28px; height: 28px; background: none; border: none; color: var(--text2);
-    font-size: 18px; cursor: pointer; flex-shrink: 0;
-  }
-
-  /* ── Hint text ── */
-  .hint { font-size: 12px; color: var(--text2); margin-top: 6px; text-align: center; }
-
-  /* ── Separator ── */
-  .sep { height: 1px; background: var(--border); margin: 12px 0; }
-
-  #fileInput, #libFileInput { display: none; }
+:root {
+  --bg:#0a1628;--bg2:#0f1f38;--bg3:#162944;
+  --accent:#1d9e75;--accent2:#ff8c00;
+  --text:#e8edf5;--text2:#8fa3bc;
+  --border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);
+  --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow:hidden;}
+#shell{display:flex;flex-direction:column;height:100%;}
+#topbar{padding:calc(var(--safe-top) + 12px) 16px 12px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;}
+.app-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;color:var(--text);}
+.app-title span{color:var(--accent);}
+#navbar{display:flex;background:var(--bg);border-top:1px solid var(--border);padding-bottom:var(--safe-bot);flex-shrink:0;}
+.nav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Barlow',sans-serif;font-size:10px;color:var(--text2);transition:color 0.2s;}
+.nav-btn.active{color:var(--accent);}
+.nav-btn svg{width:22px;height:22px;}
+#content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.page{display:none;padding:16px 16px calc(16px + var(--safe-bot));min-height:100%;}
+.page.active{display:block;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text2);margin-bottom:12px;}
+.drop-zone{border:1.5px dashed rgba(29,158,117,0.4);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;transition:background 0.2s,border-color 0.2s;}
+.drop-zone:active,.drop-zone.drag{background:rgba(29,158,117,0.08);border-color:var(--accent);}
+.drop-icon{width:36px;height:36px;margin:0 auto 10px;opacity:0.5;}
+.drop-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.drop-sub{font-size:12px;color:var(--text2);}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.mode-btn{padding:8px 6px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;text-align:center;font-family:'Barlow',sans-serif;transition:border-color 0.2s,background 0.2s;}
+.mode-btn.active{border-color:var(--accent);background:rgba(29,158,117,0.12);}
+.mode-btn-title{font-size:12px;font-weight:500;color:var(--text);}
+.mode-btn-sub{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.3;}
+.canvas-wrap{position:relative;width:100%;touch-action:none;}
+#samplerCanvas,#circleCanvas{width:100%;display:block;border-radius:10px;border:1px solid var(--border);background:#000;}
+#circleCanvas{cursor:crosshair;}
+.tol-row{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.swatch-preview{width:20px;height:20px;border-radius:5px;border:1px solid var(--border);flex-shrink:0;}
+.ctrl-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.ctrl-row:last-child{margin-bottom:0;}
+.ctrl-label{font-size:13px;color:var(--text2);min-width:80px;}
+.ctrl-val{font-size:13px;font-weight:500;color:var(--text);min-width:40px;text-align:right;}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;background:var(--bg3);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);}
+select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:8px 10px;-webkit-appearance:none;appearance:none;outline:none;}
+.results-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.result-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);}
+.result-canvas{width:100%;display:block;aspect-ratio:1;background:#111;}
+.result-label{padding:6px 8px;}
+.result-title{font-size:11px;font-weight:500;color:var(--text);}
+.result-sub{font-size:10px;color:var(--text2);margin-top:1px;}
+.dl-btn{display:block;width:100%;text-align:center;font-size:11px;padding:6px 0;border-top:1px solid var(--border);color:var(--accent);cursor:pointer;background:none;border-left:none;border-right:none;border-bottom:none;font-family:'Barlow',sans-serif;font-weight:500;}
+.dl-btn:active{background:rgba(29,158,117,0.1);}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.badge{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid var(--border);}
+.badge.ok{background:rgba(29,158,117,0.15);color:#4ecda0;border-color:rgba(29,158,117,0.3);}
+.badge.warn{background:rgba(255,140,0,0.15);color:#ffaa44;border-color:rgba(255,140,0,0.3);}
+.badge.info{background:rgba(29,100,200,0.15);color:#7ab8ff;border-color:rgba(29,100,200,0.3);}
+.save-lib-btn{width:100%;padding:12px;margin-top:12px;border-radius:10px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.1);color:var(--accent);font-family:'Barlow',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.save-lib-btn:active{background:rgba(29,158,117,0.2);}
+.ai-btn{width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;}
+.ai-btn:disabled{opacity:0.45;cursor:not-allowed;}
+.ai-btn:active:not(:disabled){opacity:0.85;}
+.ai-status{font-size:12px;color:var(--text2);margin-top:8px;text-align:center;min-height:18px;}
+.ai-status.running{color:#7ab8ff;}
+.ai-status.done{color:#4ecda0;}
+.ai-status.err{color:#ff7070;}
+.hint{font-size:12px;color:var(--text2);margin-top:6px;text-align:center;}
+.clear-btn{font-size:12px;color:var(--text2);background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:8px;width:100%;}
+.clear-btn:active{background:rgba(255,255,255,0.06);}
+.lib-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.lib-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--text);}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);}
+.icon-btn:active{background:rgba(255,255,255,0.1);}
+.lib-empty{text-align:center;padding:48px 24px;color:var(--text2);}
+.lib-empty-sub{font-size:13px;color:var(--text2);opacity:0.6;margin-top:6px;}
+.lib-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.lib-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);cursor:pointer;position:relative;}
+.lib-item:active{opacity:0.8;}
+.lib-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#111;}
+.lib-name{padding:8px 10px 4px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lib-meta{padding:0 10px 8px;font-size:11px;color:var(--text2);}
+.lib-del{position:absolute;top:6px;right:6px;width:26px;height:26px;background:rgba(0,0,0,0.6);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:flex-end;justify-content:center;padding-bottom:var(--safe-bot);}
+.modal-overlay.hidden{display:none;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px 18px 0 0;width:100%;max-width:500px;padding:20px 16px 24px;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:14px;}
+.modal input[type=text]{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:12px;}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-cancel{padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text2);font-family:'Barlow',sans-serif;font-size:15px;cursor:pointer;}
+.btn-save{padding:12px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+#installBanner{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg2);border-top:1px solid var(--border);padding:14px 16px calc(14px + var(--safe-bot));display:flex;align-items:center;gap:12px;}
+#installBanner.hidden{display:none;}
+.install-text{flex:1;font-size:13px;color:var(--text2);line-height:1.4;}
+.install-text strong{color:var(--text);display:block;margin-bottom:2px;}
+.install-btn{padding:9px 16px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.install-close{width:28px;height:28px;background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;flex-shrink:0;}
+#fileInput,#libFileInput{display:none;}
 </style>
 </head>
 <body>
-
 <div id="shell">
   <div id="topbar">
     <div class="app-title">BASS <span>VISION</span></div>
@@ -241,13 +121,13 @@
 
   <div id="content">
 
-    <!-- ── SIMULATE PAGE ── -->
+    <!-- SIMULATE PAGE -->
     <div class="page active" id="page-simulate">
 
       <div class="card">
         <div class="card-title">1 — Load lure image</div>
         <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-          <svg class="drop-zone-icon" viewBox="0 0 36 36" fill="none">
+          <svg class="drop-icon" viewBox="0 0 36 36" fill="none">
             <rect x="4" y="7" width="28" height="22" rx="3" stroke="currentColor" stroke-width="1.5"/>
             <circle cx="12" cy="15" r="3" stroke="currentColor" stroke-width="1.5"/>
             <path d="M4 25l8-7 6 6 5-5 9 8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -260,33 +140,50 @@
       </div>
 
       <div class="card" id="modeCard" style="display:none;">
-        <div class="card-title">2 — Background type</div>
+        <div class="card-title">2 — Background removal method</div>
         <div class="mode-grid">
           <button class="mode-btn active" id="btnSolid" onclick="setMode('solid')">
-            <div class="mode-btn-title">Solid</div>
-            <div class="mode-btn-sub">White, black, studio — tap to sample color</div>
+            <div class="mode-btn-title">Color</div>
+            <div class="mode-btn-sub">Tap solid background to mask</div>
           </button>
-          <button class="mode-btn" id="btnNatural" onclick="setMode('natural')">
-            <div class="mode-btn-title">No mask</div>
-            <div class="mode-btn-sub">Apply filter to whole image</div>
+          <button class="mode-btn" id="btnCircle" onclick="setMode('circle')">
+            <div class="mode-btn-title">Draw</div>
+            <div class="mode-btn-sub">Circle the lure to isolate it</div>
+          </button>
+          <button class="mode-btn" id="btnNone" onclick="setMode('none')">
+            <div class="mode-btn-title">None</div>
+            <div class="mode-btn-sub">Filter whole image</div>
           </button>
         </div>
       </div>
 
+      <!-- Solid color sampler -->
       <div class="card" id="solidCard" style="display:none;">
-        <div class="card-title">3 — Tap background to remove it</div>
-        <canvas id="samplerCanvas"></canvas>
+        <div class="card-title">3 — Tap the background color</div>
+        <div class="canvas-wrap">
+          <canvas id="samplerCanvas"></canvas>
+        </div>
         <div class="tol-row">
           <span class="ctrl-label" style="min-width:72px;font-size:12px;">Tolerance</span>
           <input type="range" min="5" max="120" value="35" step="1" id="tolSlider">
           <span class="ctrl-val" id="tolVal">35</span>
           <div class="swatch-preview" id="bgSwatch"></div>
         </div>
-        <div class="hint" id="samplerHint">Tap the background — blue tint shows masked area</div>
+        <div class="hint" id="samplerHint">Tap background — blue shows what's masked</div>
+      </div>
+
+      <!-- Circle draw -->
+      <div class="card" id="circleCard" style="display:none;">
+        <div class="card-title">3 — Draw a circle around the lure</div>
+        <div class="canvas-wrap">
+          <canvas id="circleCanvas"></canvas>
+        </div>
+        <div class="hint" id="circleHint">Drag to draw a circle around the lure</div>
+        <button class="clear-btn" onclick="clearCircle()">Clear circle</button>
       </div>
 
       <div class="card" id="condCard" style="display:none;">
-        <div class="card-title" id="condStepLabel">4 — Water conditions</div>
+        <div class="card-title" id="condLabel">4 — Water conditions</div>
         <div class="ctrl-row">
           <span class="ctrl-label">Water type</span>
           <select id="waterType">
@@ -347,11 +244,11 @@
 
     </div><!-- /simulate -->
 
-    <!-- ── LIBRARY PAGE ── -->
+    <!-- LIBRARY PAGE -->
     <div class="page" id="page-library">
       <div class="lib-header">
         <div class="lib-title">My Lures</div>
-        <button class="icon-btn" onclick="document.getElementById('libFileInput').click()" title="Add lure">
+        <button class="icon-btn" onclick="document.getElementById('libFileInput').click()">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
       </div>
@@ -396,29 +293,25 @@
 </div>
 
 <script>
-// ── Service Worker Registration ──────────────────────────────────────────────
+// ── PWA ───────────────────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
-
-// ── PWA Install ──────────────────────────────────────────────────────────────
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
+  e.preventDefault(); deferredPrompt = e;
   document.getElementById('installBanner').classList.remove('hidden');
 });
 document.getElementById('installBtn').addEventListener('click', () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      document.getElementById('installBanner').classList.add('hidden');
-    });
-  }
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.add('hidden');
+  });
 });
 
-// ── Navigation ───────────────────────────────────────────────────────────────
+// ── Nav ───────────────────────────────────────────────────────────────────────
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -427,136 +320,205 @@ function showPage(name) {
   if (name === 'library') renderLibrary();
 }
 
-// ── State ────────────────────────────────────────────────────────────────────
+// ── Constants ─────────────────────────────────────────────────────────────────
 const waterParams = {
-  clear: {ra:0.038,ga:0.015,ba:0.006,tint:[0,2,18],clarity:1.0},
-  green: {ra:0.065,ga:0.010,ba:0.022,tint:[0,14,8],clarity:0.55},
-  brown: {ra:0.095,ga:0.032,ba:0.038,tint:[14,7,0],clarity:0.28}
+  clear:{ra:0.038,ga:0.015,ba:0.006,tint:[0,2,18],clarity:1.0},
+  green:{ra:0.065,ga:0.010,ba:0.022,tint:[0,14,8],clarity:0.55},
+  brown:{ra:0.095,ga:0.032,ba:0.038,tint:[14,7,0],clarity:0.28}
 };
 const lightMult = {bright:1.0,overcast:0.72,low:0.48};
 
+// ── State ─────────────────────────────────────────────────────────────────────
 let sourceImage = null;
 let fullResPixels = null;
 let fullW = 0, fullH = 0;
 let lureMask = null;
 let bgColor = null;
 let currentMode = 'solid';
-let currentFileDataURL = null;
+// Circle draw state
+let circleCenter = null, circleRadius = 0;
+let isDrawing = false, drawStart = null;
 
-// ── File upload (simulate) ───────────────────────────────────────────────────
+// ── File upload ───────────────────────────────────────────────────────────────
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('drag');
-  const f = e.dataTransfer.files[0];
-  if (f && f.type.startsWith('image/')) loadFile(f);
+dropZone.addEventListener('dragover', e=>{e.preventDefault();dropZone.classList.add('drag');});
+dropZone.addEventListener('dragleave', ()=>dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e=>{
+  e.preventDefault();dropZone.classList.remove('drag');
+  const f=e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('image/'))loadFile(f);
 });
-fileInput.addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0]); });
+fileInput.addEventListener('change', e=>{if(e.target.files[0])loadFile(e.target.files[0]);});
 
 function loadFile(file) {
   const reader = new FileReader();
   reader.onload = ev => {
-    currentFileDataURL = ev.target.result;
     const img = new Image();
     img.onload = () => {
       sourceImage = img;
       document.getElementById('dropTitle').textContent = file.name;
       document.getElementById('dropSub').textContent = img.width + ' × ' + img.height;
-      lureMask = null; bgColor = null;
-      setupSampler();
+      lureMask = null; bgColor = null; circleCenter = null; circleRadius = 0;
+      setupCanvases();
       document.getElementById('modeCard').style.display = '';
       document.getElementById('condCard').style.display = '';
       document.getElementById('resultsCard').style.display = '';
-      setMode(currentMode);
+      setMode('solid');
     };
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-// ── Library file upload ──────────────────────────────────────────────────────
-document.getElementById('libFileInput').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const name = file.name.replace(/\.[^.]+$/, '');
-    promptLibrarySave(ev.target.result, name);
-  };
-  reader.readAsDataURL(file);
-  e.target.value = '';
-});
+// ── Setup canvases ────────────────────────────────────────────────────────────
+function setupCanvases() {
+  const maxW = Math.min(window.innerWidth - 64, 600);
+  const scale = Math.min(maxW / sourceImage.width, 320 / sourceImage.height, 1);
+  fullW = Math.round(sourceImage.width * scale);
+  fullH = Math.round(sourceImage.height * scale);
 
-function promptLibrarySave(dataURL, defaultName) {
-  const name = prompt('Name this lure:', defaultName);
-  if (!name) return;
-  const lures = getLibrary();
-  lures.unshift({ id: Date.now(), name, dataURL, added: new Date().toLocaleDateString() });
-  saveLibrary(lures);
-  renderLibrary();
-  showPage('library');
+  // Sampler canvas
+  const sc = document.getElementById('samplerCanvas');
+  sc.width = fullW; sc.height = fullH;
+  const sctx = sc.getContext('2d');
+  sctx.drawImage(sourceImage, 0, 0, fullW, fullH);
+  fullResPixels = sctx.getImageData(0, 0, fullW, fullH);
+
+  // Circle canvas
+  const cc = document.getElementById('circleCanvas');
+  cc.width = fullW; cc.height = fullH;
+  redrawCircleCanvas();
+
+  // Tap/touch handlers for sampler
+  function handleSamplerTap(clientX, clientY) {
+    if (currentMode !== 'solid') return;
+    const rect = sc.getBoundingClientRect();
+    const px = Math.round((clientX - rect.left) * (fullW / rect.width));
+    const py = Math.round((clientY - rect.top) * (fullH / rect.height));
+    if (px < 0 || py < 0 || px >= fullW || py >= fullH) return;
+    const idx = (py * fullW + px) * 4;
+    const d = fullResPixels.data;
+    bgColor = {r:d[idx],g:d[idx+1],b:d[idx+2]};
+    document.getElementById('bgSwatch').style.background = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
+    buildMaskSolid(); processImage();
+  }
+  sc.addEventListener('click', e => handleSamplerTap(e.clientX, e.clientY));
+  sc.addEventListener('touchend', e => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    handleSamplerTap(t.clientX, t.clientY);
+  }, {passive:false});
+
+  // Circle draw handlers
+  setupCircleDrawing();
 }
 
-// ── Mode ─────────────────────────────────────────────────────────────────────
-function setMode(mode) {
-  currentMode = mode;
-  document.getElementById('btnSolid').className = 'mode-btn' + (mode === 'solid' ? ' active' : '');
-  document.getElementById('btnNatural').className = 'mode-btn' + (mode === 'natural' ? ' active' : '');
-  document.getElementById('solidCard').style.display = mode === 'solid' && sourceImage ? '' : 'none';
-  document.getElementById('condStepLabel').textContent = mode === 'solid' ? '4 — Water conditions' : '3 — Water conditions';
-  if (mode === 'natural') { lureMask = null; }
-  if (mode === 'solid' && sourceImage) refreshSamplerOverlay();
+// ── Circle drawing ────────────────────────────────────────────────────────────
+function setupCircleDrawing() {
+  const cc = document.getElementById('circleCanvas');
+
+  function getPos(clientX, clientY) {
+    const rect = cc.getBoundingClientRect();
+    return {
+      x: (clientX - rect.left) * (fullW / rect.width),
+      y: (clientY - rect.top)  * (fullH / rect.height)
+    };
+  }
+
+  function onStart(x, y) {
+    isDrawing = true;
+    drawStart = {x, y};
+    circleCenter = null; circleRadius = 0;
+  }
+  function onMove(x, y) {
+    if (!isDrawing) return;
+    const dx = x - drawStart.x, dy = y - drawStart.y;
+    circleRadius = Math.sqrt(dx*dx + dy*dy) / 2;
+    circleCenter = {x: drawStart.x + dx/2, y: drawStart.y + dy/2};
+    redrawCircleCanvas();
+  }
+  function onEnd() {
+    if (!isDrawing) return;
+    isDrawing = false;
+    if (circleCenter && circleRadius > 5) {
+      buildMaskCircle();
+      processImage();
+      document.getElementById('circleHint').textContent = 'Circle set — drag again to redraw';
+    }
+  }
+
+  cc.addEventListener('mousedown', e => { onStart(...Object.values(getPos(e.clientX, e.clientY))); });
+  cc.addEventListener('mousemove', e => { onMove(...Object.values(getPos(e.clientX, e.clientY))); });
+  cc.addEventListener('mouseup', onEnd);
+  cc.addEventListener('mouseleave', onEnd);
+
+  cc.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    const p = getPos(t.clientX, t.clientY);
+    onStart(p.x, p.y);
+  }, {passive:false});
+  cc.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    const p = getPos(t.clientX, t.clientY);
+    onMove(p.x, p.y);
+  }, {passive:false});
+  cc.addEventListener('touchend', e => { e.preventDefault(); onEnd(); }, {passive:false});
+}
+
+function redrawCircleCanvas() {
+  const cc = document.getElementById('circleCanvas');
+  const ctx = cc.getContext('2d');
+  ctx.clearRect(0, 0, fullW, fullH);
+  ctx.drawImage(sourceImage, 0, 0, fullW, fullH);
+  if (circleCenter && circleRadius > 0) {
+    // Dim outside
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, fullW, fullH);
+    ctx.arc(circleCenter.x, circleCenter.y, circleRadius, 0, Math.PI*2, true);
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    ctx.fill('evenodd');
+    ctx.restore();
+    // Circle outline
+    ctx.beginPath();
+    ctx.arc(circleCenter.x, circleCenter.y, circleRadius, 0, Math.PI*2);
+    ctx.strokeStyle = '#1d9e75';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Center dot
+    ctx.beginPath();
+    ctx.arc(circleCenter.x, circleCenter.y, 3, 0, Math.PI*2);
+    ctx.fillStyle = '#1d9e75';
+    ctx.fill();
+  }
+}
+
+function clearCircle() {
+  circleCenter = null; circleRadius = 0; lureMask = null;
+  redrawCircleCanvas();
+  document.getElementById('circleHint').textContent = 'Drag to draw a circle around the lure';
   processImage();
 }
 
-// ── Sampler ──────────────────────────────────────────────────────────────────
-function setupSampler() {
-  const sc = document.getElementById('samplerCanvas');
-  const maxW = window.innerWidth - 64;
-  const scale = Math.min(maxW / sourceImage.width, 280 / sourceImage.height, 1);
-  const sw = Math.round(sourceImage.width * scale);
-  const sh = Math.round(sourceImage.height * scale);
-  sc.width = sw; sc.height = sh;
-  const ctx = sc.getContext('2d');
-  ctx.drawImage(sourceImage, 0, 0, sw, sh);
-  fullResPixels = ctx.getImageData(0, 0, sw, sh);
-  fullW = sw; fullH = sh;
-
-  sc.onclick = e => {
-    if (currentMode !== 'solid') return;
-    const rect = sc.getBoundingClientRect();
-    const scaleX = sw / rect.width;
-    const scaleY = sh / rect.height;
-    const px = Math.round((e.clientX - rect.left) * scaleX);
-    const py = Math.round((e.clientY - rect.top) * scaleY);
-    const idx = (py * sw + px) * 4;
-    const d = fullResPixels.data;
-    bgColor = { r: d[idx], g: d[idx+1], b: d[idx+2] };
-    document.getElementById('bgSwatch').style.background = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-    buildMaskSolid();
-    processImage();
-  };
-  sc.addEventListener('touchstart', e => {
-    if (currentMode !== 'solid') return;
-    e.preventDefault();
-    const t = e.touches[0];
-    const rect = sc.getBoundingClientRect();
-    const scaleX = sw / rect.width;
-    const scaleY = sh / rect.height;
-    const px = Math.round((t.clientX - rect.left) * scaleX);
-    const py = Math.round((t.clientY - rect.top) * scaleY);
-    if (px < 0 || py < 0 || px >= sw || py >= sh) return;
-    const idx = (py * sw + px) * 4;
-    const d = fullResPixels.data;
-    bgColor = { r: d[idx], g: d[idx+1], b: d[idx+2] };
-    document.getElementById('bgSwatch').style.background = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-    buildMaskSolid();
-    processImage();
-  }, { passive: false });
+function buildMaskCircle() {
+  if (!circleCenter || circleRadius <= 0) return;
+  const n = fullW * fullH;
+  lureMask = new Uint8Array(n);
+  const cx = circleCenter.x, cy = circleCenter.y, r2 = circleRadius * circleRadius;
+  for (let y = 0; y < fullH; y++) {
+    for (let x = 0; x < fullW; x++) {
+      const dx = x - cx, dy = y - cy;
+      lureMask[y * fullW + x] = (dx*dx + dy*dy) <= r2 ? 1 : 0;
+    }
+  }
 }
 
+// ── Solid color mask ──────────────────────────────────────────────────────────
 function colorDist(r1,g1,b1,r2,g2,b2) {
   return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2);
 }
@@ -565,9 +527,8 @@ function buildMaskSolid() {
   if (!bgColor) return;
   const tol = parseInt(document.getElementById('tolSlider').value);
   const d = fullResPixels.data;
-  const n = fullW * fullH;
-  lureMask = new Uint8Array(n);
-  for (let i = 0; i < n; i++) {
+  lureMask = new Uint8Array(fullW * fullH);
+  for (let i = 0; i < fullW * fullH; i++) {
     const idx = i * 4;
     lureMask[i] = colorDist(d[idx],d[idx+1],d[idx+2],bgColor.r,bgColor.g,bgColor.b) > tol ? 1 : 0;
   }
@@ -576,7 +537,6 @@ function buildMaskSolid() {
 }
 
 function refreshSamplerOverlay() {
-  if (!sourceImage) return;
   const sc = document.getElementById('samplerCanvas');
   const ctx = sc.getContext('2d');
   ctx.drawImage(sourceImage, 0, 0, fullW, fullH);
@@ -584,19 +544,35 @@ function refreshSamplerOverlay() {
   const img = ctx.getImageData(0, 0, fullW, fullH);
   const d = img.data;
   for (let i = 0; i < fullW * fullH; i++) {
-    if (!lureMask[i]) {
-      d[i*4] = 60; d[i*4+1] = 140; d[i*4+2] = 255; d[i*4+3] = 160;
-    }
+    if (!lureMask[i]) { d[i*4]=60;d[i*4+1]=140;d[i*4+2]=255;d[i*4+3]=160; }
   }
   ctx.putImageData(img, 0, 0);
 }
 
-// ── Process Image ─────────────────────────────────────────────────────────────
+// ── Mode switching ────────────────────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  ['solid','circle','none'].forEach(m => {
+    document.getElementById('btn'+m.charAt(0).toUpperCase()+m.slice(1)).className =
+      'mode-btn' + (m === mode ? ' active' : '');
+  });
+  document.getElementById('solidCard').style.display  = mode === 'solid'  ? '' : 'none';
+  document.getElementById('circleCard').style.display = mode === 'circle' ? '' : 'none';
+  const stepNum = mode === 'none' ? '3' : '4';
+  document.getElementById('condLabel').textContent = stepNum + ' — Water conditions';
+
+  if (mode !== 'solid' && mode !== 'circle') { lureMask = null; }
+  if (mode === 'solid') refreshSamplerOverlay();
+  if (mode === 'circle') redrawCircleCanvas();
+  processImage();
+}
+
+// ── Process image ─────────────────────────────────────────────────────────────
 function processImage() {
   if (!sourceImage) return;
   const waterType = document.getElementById('waterType').value;
-  const depth = parseInt(document.getElementById('depthSlider').value);
-  const light = document.getElementById('lightCond').value;
+  const depth     = parseInt(document.getElementById('depthSlider').value);
+  const light     = document.getElementById('lightCond').value;
   const p = waterParams[waterType];
   const lm = lightMult[light];
 
@@ -607,7 +583,7 @@ function processImage() {
 
   const origCtx = document.getElementById('origCanvas').getContext('2d');
   origCtx.drawImage(sourceImage, 0, 0, fullW, fullH);
-  const origData = origCtx.getImageData(0, 0, fullW, fullH);
+  const src = origCtx.getImageData(0, 0, fullW, fullH).data;
 
   const redF   = Math.exp(-p.ra * depth);
   const greenF = Math.exp(-p.ga * depth);
@@ -615,63 +591,57 @@ function processImage() {
   const darkF  = Math.max(0.08, lm * Math.exp(-0.016 * depth));
 
   const waterCtx = document.getElementById('waterCanvas').getContext('2d');
-  const waterImg = waterCtx.createImageData(fullW, fullH);
   const bassCtx  = document.getElementById('bassCanvas').getContext('2d');
+  const waterImg = waterCtx.createImageData(fullW, fullH);
   const bassImg  = bassCtx.createImageData(fullW, fullH);
-
-  const src = origData.data;
-  const wd = waterImg.data;
-  const bd = bassImg.data;
+  const wd = waterImg.data, bd = bassImg.data;
 
   for (let i = 0; i < fullW * fullH; i++) {
-    const px = i * 4;
-    const r = src[px], g = src[px+1], b = src[px+2], a = src[px+3];
+    const px = i*4;
+    const r=src[px],g=src[px+1],b=src[px+2],a=src[px+3];
     const isLure = !lureMask || lureMask[i] === 1;
-    let wr, wg, wb;
+    let wr,wg,wb;
     if (isLure) {
-      wr = r * redF * darkF + p.tint[0] * (1-redF) * lm * darkF;
-      wg = g * greenF * darkF + p.tint[1] * (1-greenF) * lm * darkF;
-      wb = b * blueF * darkF + p.tint[2] * (1-blueF) * lm * darkF;
-    } else { wr = r; wg = g; wb = b; }
-    wd[px]   = Math.max(0, Math.min(255, wr));
-    wd[px+1] = Math.max(0, Math.min(255, wg));
-    wd[px+2] = Math.max(0, Math.min(255, wb));
-    wd[px+3] = a;
-    let br, bg_, bb;
+      wr = r*redF*darkF   + p.tint[0]*(1-redF)*lm*darkF;
+      wg = g*greenF*darkF + p.tint[1]*(1-greenF)*lm*darkF;
+      wb = b*blueF*darkF  + p.tint[2]*(1-blueF)*lm*darkF;
+    } else { wr=r;wg=g;wb=b; }
+    wd[px]=Math.max(0,Math.min(255,wr));
+    wd[px+1]=Math.max(0,Math.min(255,wg));
+    wd[px+2]=Math.max(0,Math.min(255,wb));
+    wd[px+3]=a;
+    let br,bg_,bb;
     if (isLure) {
-      br  = 0.95*wr + 0.05*wg;
-      bg_ = 0.43*wg + 0.57*wb;
-      bb  = 0.48*wg + 0.52*wb;
-    } else { br = r; bg_ = g; bb = b; }
-    bd[px]   = Math.max(0, Math.min(255, br));
-    bd[px+1] = Math.max(0, Math.min(255, bg_));
-    bd[px+2] = Math.max(0, Math.min(255, bb));
-    bd[px+3] = a;
+      br=0.95*wr+0.05*wg; bg_=0.43*wg+0.57*wb; bb=0.48*wg+0.52*wb;
+    } else { br=r;bg_=g;bb=b; }
+    bd[px]=Math.max(0,Math.min(255,br));
+    bd[px+1]=Math.max(0,Math.min(255,bg_));
+    bd[px+2]=Math.max(0,Math.min(255,bb));
+    bd[px+3]=a;
   }
+  waterCtx.putImageData(waterImg,0,0);
+  bassCtx.putImageData(bassImg,0,0);
 
-  waterCtx.putImageData(waterImg, 0, 0);
-  bassCtx.putImageData(bassImg, 0, 0);
+  document.getElementById('waterSub').textContent = depth+' ft · '+waterType;
+  document.getElementById('bassSub').textContent  = 'Tritanopia · '+depth+' ft';
 
-  document.getElementById('waterSub').textContent = depth + ' ft · ' + waterType;
-  document.getElementById('bassSub').textContent  = 'Tritanopia · ' + depth + ' ft';
+  const effDepth = depth/(p.clarity*lm);
+  let visCls='ok',visLabel='Good visibility';
+  if(effDepth>20){visCls='warn';visLabel='Very poor visibility';}
+  else if(effDepth>12){visCls='warn';visLabel='Poor visibility';}
+  else if(effDepth>5){visCls='';visLabel='Moderate visibility';}
 
-  const effDepth = depth / (p.clarity * lm);
-  let visCls = 'ok', visLabel = 'Good visibility';
-  if (effDepth > 20) { visCls = 'warn'; visLabel = 'Very poor visibility'; }
-  else if (effDepth > 12) { visCls = 'warn'; visLabel = 'Poor visibility'; }
-  else if (effDepth > 5)  { visCls = ''; visLabel = 'Moderate visibility'; }
-
-  const redLimits = {clear:9,green:5,brown:3};
-  const redGone = depth > redLimits[waterType];
+  const redGone = depth > {clear:9,green:5,brown:3}[waterType];
   const lightLabel = {bright:'Bright sun',overcast:'Overcast',low:'Low light'}[light];
   const maskBadge = lureMask
-    ? '<span class="badge ok">Lure isolated</span>'
+    ? (currentMode==='circle'
+        ? '<span class="badge ok">Circle mask</span>'
+        : '<span class="badge ok">Color mask</span>')
     : '<span class="badge info">Full image filtered</span>';
-
   document.getElementById('badges').innerHTML =
     maskBadge +
     `<span class="badge ${visCls}">${visLabel}</span>` +
-    (redGone ? `<span class="badge warn">Red absorbed</span>` : '') +
+    (redGone?'<span class="badge warn">Red absorbed</span>':'') +
     `<span class="badge">${depth} ft · ${waterType} · ${lightLabel}</span>`;
 }
 
@@ -679,75 +649,72 @@ function processImage() {
 function downloadCanvas(id, filename) {
   const c = document.getElementById(id);
   const link = document.createElement('a');
-  link.download = filename;
-  link.href = c.toDataURL('image/jpeg', 0.92);
-  link.click();
+  link.download = filename; link.href = c.toDataURL('image/jpeg',0.92); link.click();
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────
-document.getElementById('depthSlider').addEventListener('input', function() {
-  document.getElementById('depthVal').textContent = this.value + ' ft';
-  processImage();
+document.getElementById('depthSlider').addEventListener('input', function(){
+  document.getElementById('depthVal').textContent = this.value+' ft'; processImage();
 });
-document.getElementById('tolSlider').addEventListener('input', function() {
-  document.getElementById('tolVal').textContent = this.value;
-  buildMaskSolid(); processImage();
+document.getElementById('tolSlider').addEventListener('input', function(){
+  document.getElementById('tolVal').textContent = this.value; buildMaskSolid(); processImage();
 });
 document.getElementById('waterType').addEventListener('change', processImage);
 document.getElementById('lightCond').addEventListener('change', processImage);
 
 // ── Save modal ────────────────────────────────────────────────────────────────
-function openSaveModal() {
-  document.getElementById('lureName').value = '';
+function openSaveModal(){
+  document.getElementById('lureName').value='';
   document.getElementById('saveModal').classList.remove('hidden');
-  setTimeout(() => document.getElementById('lureName').focus(), 100);
+  setTimeout(()=>document.getElementById('lureName').focus(),100);
 }
-function closeSaveModal() {
-  document.getElementById('saveModal').classList.add('hidden');
-}
-function saveToLibrary() {
-  const name = document.getElementById('lureName').value.trim() || 'Unnamed Lure';
-  const origCanvas = document.getElementById('origCanvas');
-  const dataURL = origCanvas.toDataURL('image/jpeg', 0.85);
-  const lures = getLibrary();
-  lures.unshift({
-    id: Date.now(), name, dataURL,
-    added: new Date().toLocaleDateString()
-  });
+function closeSaveModal(){document.getElementById('saveModal').classList.add('hidden');}
+function saveToLibrary(){
+  const name=document.getElementById('lureName').value.trim()||'Unnamed Lure';
+  const dataURL=document.getElementById('origCanvas').toDataURL('image/jpeg',0.85);
+  const lures=getLibrary();
+  lures.unshift({id:Date.now(),name,dataURL,added:new Date().toLocaleDateString()});
   saveLibrary(lures);
   closeSaveModal();
   showPage('library');
 }
-document.getElementById('saveModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('saveModal')) closeSaveModal();
+document.getElementById('saveModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('saveModal'))closeSaveModal();
 });
 
-// ── Library storage ───────────────────────────────────────────────────────────
-function getLibrary() {
-  try { return JSON.parse(localStorage.getItem('bassVisionLibrary') || '[]'); } catch { return []; }
-}
-function saveLibrary(lures) {
-  try { localStorage.setItem('bassVisionLibrary', JSON.stringify(lures)); } catch(e) {
-    alert('Storage full — try deleting some lures.');
-  }
-}
+// ── Library ───────────────────────────────────────────────────────────────────
+document.getElementById('libFileInput').addEventListener('change',e=>{
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const name=file.name.replace(/\.[^.]+$/,'');
+    const n=prompt('Name this lure:',name); if(!n)return;
+    const lures=getLibrary();
+    lures.unshift({id:Date.now(),name:n,dataURL:ev.target.result,added:new Date().toLocaleDateString()});
+    saveLibrary(lures); renderLibrary();
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+});
 
-function renderLibrary() {
-  const lures = getLibrary();
-  const el = document.getElementById('libContent');
-  if (!lures.length) {
-    el.innerHTML = `
-      <div class="lib-empty">
-        <div class="lib-empty-icon">🎣</div>
-        <div class="lib-empty-text">No lures saved yet</div>
-        <div class="lib-empty-sub">Simulate a lure and tap "Save to library"<br>or tap + above to add a photo directly</div>
-      </div>`;
+function getLibrary(){try{return JSON.parse(localStorage.getItem('bassVisionLibrary')||'[]');}catch{return[];}}
+function saveLibrary(lures){try{localStorage.setItem('bassVisionLibrary',JSON.stringify(lures));}catch{alert('Storage full — try deleting some lures.');}}
+
+function renderLibrary(){
+  const lures=getLibrary();
+  const el=document.getElementById('libContent');
+  if(!lures.length){
+    el.innerHTML=`<div class="lib-empty">
+      <div style="font-size:48px;margin-bottom:12px;opacity:.4;">🎣</div>
+      <div style="font-size:15px;font-weight:500;color:var(--text2);">No lures saved yet</div>
+      <div class="lib-empty-sub">Simulate a lure and tap "Save to library"<br>or tap + above to add a photo directly</div>
+    </div>`;
     return;
   }
-  el.innerHTML = `<div class="lib-grid">${lures.map(l => `
+  el.innerHTML=`<div class="lib-grid">${lures.map(l=>`
     <div class="lib-item" onclick="loadFromLibrary(${l.id})">
       <img class="lib-img" src="${l.dataURL}" alt="${l.name}">
-      <button class="lib-del" onclick="event.stopPropagation();deleteLure(${l.id})" title="Delete">
+      <button class="lib-del" onclick="event.stopPropagation();deleteLure(${l.id})">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
       <div class="lib-name">${l.name}</div>
@@ -755,39 +722,27 @@ function renderLibrary() {
     </div>`).join('')}</div>`;
 }
 
-function deleteLure(id) {
-  if (!confirm('Delete this lure?')) return;
-  saveLibrary(getLibrary().filter(l => l.id !== id));
-  renderLibrary();
+function deleteLure(id){
+  if(!confirm('Delete this lure?'))return;
+  saveLibrary(getLibrary().filter(l=>l.id!==id)); renderLibrary();
 }
 
-function loadFromLibrary(id) {
-  const lure = getLibrary().find(l => l.id === id);
-  if (!lure) return;
-  const img = new Image();
-  img.onload = () => {
-    sourceImage = img;
-    currentFileDataURL = lure.dataURL;
-    document.getElementById('dropTitle').textContent = lure.name;
-    document.getElementById('dropSub').textContent = img.width + ' × ' + img.height;
-    lureMask = null; bgColor = null;
-    setupSampler();
-    document.getElementById('modeCard').style.display = '';
-    document.getElementById('condCard').style.display = '';
-    document.getElementById('resultsCard').style.display = '';
-    setMode(currentMode);
+function loadFromLibrary(id){
+  const lure=getLibrary().find(l=>l.id===id); if(!lure)return;
+  const img=new Image();
+  img.onload=()=>{
+    sourceImage=img;
+    document.getElementById('dropTitle').textContent=lure.name;
+    document.getElementById('dropSub').textContent=img.width+' × '+img.height;
+    lureMask=null;bgColor=null;circleCenter=null;circleRadius=0;
+    setupCanvases();
+    document.getElementById('modeCard').style.display='';
+    document.getElementById('condCard').style.display='';
+    document.getElementById('resultsCard').style.display='';
+    setMode('solid');
     showPage('simulate');
   };
-  img.src = lure.dataURL;
-}
-</script>
-
-<!-- Service worker -->
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js');
-  });
+  img.src=lure.dataURL;
 }
 </script>
 </body>

@@ -1,10 +1,11 @@
-const CACHE = 'bass-vision-v1';
+const CACHE = 'bass-vision-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './favicon.ico',
   'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap'
 ];
 
