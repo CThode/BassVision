@@ -23,11 +23,11 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow:hidden;}
 #shell{display:flex;flex-direction:column;height:100%;}
-#topbar{padding:calc(var(--safe-top) + 12px) 16px 12px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;}
-.app-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;color:var(--text);}
+#topbar{padding:calc(var(--safe-top)+12px) 16px 12px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;}
+.app-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;}
 .app-title span{color:var(--accent);}
 #navbar{display:flex;background:var(--bg);border-top:1px solid var(--border);padding-bottom:var(--safe-bot);flex-shrink:0;}
-.nav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Barlow',sans-serif;font-size:10px;color:var(--text2);transition:color 0.2s;}
+.nav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Barlow',sans-serif;font-size:10px;color:var(--text2);transition:color .2s;}
 .nav-btn.active{color:var(--accent);}
 .nav-btn svg{width:22px;height:22px;}
 #content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
@@ -35,15 +35,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 .page.active{display:block;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;}
 .card-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text2);margin-bottom:12px;}
-.drop-zone{border:1.5px dashed rgba(29,158,117,0.4);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;transition:background 0.2s,border-color 0.2s;}
-.drop-zone:active,.drop-zone.drag{background:rgba(29,158,117,0.08);border-color:var(--accent);}
-.drop-icon{width:36px;height:36px;margin:0 auto 10px;opacity:0.5;}
-.drop-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.drop-zone{border:1.5px dashed rgba(29,158,117,.4);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;transition:background .2s,border-color .2s;}
+.drop-zone:active,.drop-zone.drag{background:rgba(29,158,117,.08);border-color:var(--accent);}
+.drop-icon{width:36px;height:36px;margin:0 auto 10px;opacity:.5;}
+.drop-title{font-size:15px;font-weight:500;margin-bottom:4px;}
 .drop-sub{font-size:12px;color:var(--text2);}
 .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.mode-btn{padding:8px 6px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;text-align:center;font-family:'Barlow',sans-serif;transition:border-color 0.2s,background 0.2s;}
-.mode-btn.active{border-color:var(--accent);background:rgba(29,158,117,0.12);}
-.mode-btn-title{font-size:12px;font-weight:500;color:var(--text);}
+.mode-btn{padding:8px 6px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;text-align:center;font-family:'Barlow',sans-serif;transition:border-color .2s,background .2s;}
+.mode-btn.active{border-color:var(--accent);background:rgba(29,158,117,.12);}
+.mode-btn-title{font-size:12px;font-weight:500;}
 .mode-btn-sub{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.3;}
 .canvas-wrap{position:relative;width:100%;touch-action:none;}
 #samplerCanvas,#circleCanvas{width:100%;display:block;border-radius:10px;border:1px solid var(--border);background:#000;}
@@ -53,62 +53,115 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 .ctrl-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
 .ctrl-row:last-child{margin-bottom:0;}
 .ctrl-label{font-size:13px;color:var(--text2);min-width:80px;}
-.ctrl-val{font-size:13px;font-weight:500;color:var(--text);min-width:40px;text-align:right;}
+.ctrl-val{font-size:13px;font-weight:500;min-width:40px;text-align:right;}
 input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;background:var(--bg3);border-radius:2px;outline:none;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);}
-select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:8px 10px;-webkit-appearance:none;appearance:none;outline:none;}
+select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:8px 10px;-webkit-appearance:none;outline:none;}
+
+/* Results */
 .results-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
 .result-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);}
 .result-canvas{width:100%;display:block;aspect-ratio:1;background:#111;}
+.result-canvas.clickable{cursor:zoom-in;}
 .result-label{padding:6px 8px;}
-.result-title{font-size:11px;font-weight:500;color:var(--text);}
+.result-title{font-size:11px;font-weight:500;}
 .result-sub{font-size:10px;color:var(--text2);margin-top:1px;}
 .dl-btn{display:block;width:100%;text-align:center;font-size:11px;padding:6px 0;border-top:1px solid var(--border);color:var(--accent);cursor:pointer;background:none;border-left:none;border-right:none;border-bottom:none;font-family:'Barlow',sans-serif;font-weight:500;}
-.dl-btn:active{background:rgba(29,158,117,0.1);}
+.dl-btn:active{background:rgba(29,158,117,.1);}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-.badge{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid var(--border);}
-.badge.ok{background:rgba(29,158,117,0.15);color:#4ecda0;border-color:rgba(29,158,117,0.3);}
-.badge.warn{background:rgba(255,140,0,0.15);color:#ffaa44;border-color:rgba(255,140,0,0.3);}
-.badge.info{background:rgba(29,100,200,0.15);color:#7ab8ff;border-color:rgba(29,100,200,0.3);}
-.save-lib-btn{width:100%;padding:12px;margin-top:12px;border-radius:10px;border:1px solid rgba(29,158,117,0.4);background:rgba(29,158,117,0.1);color:var(--accent);font-family:'Barlow',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
-.save-lib-btn:active{background:rgba(29,158,117,0.2);}
-.ai-btn{width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;}
-.ai-btn:disabled{opacity:0.45;cursor:not-allowed;}
-.ai-btn:active:not(:disabled){opacity:0.85;}
-.ai-status{font-size:12px;color:var(--text2);margin-top:8px;text-align:center;min-height:18px;}
-.ai-status.running{color:#7ab8ff;}
-.ai-status.done{color:#4ecda0;}
-.ai-status.err{color:#ff7070;}
+.badge{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border);}
+.badge.ok{background:rgba(29,158,117,.15);color:#4ecda0;border-color:rgba(29,158,117,.3);}
+.badge.warn{background:rgba(255,140,0,.15);color:#ffaa44;border-color:rgba(255,140,0,.3);}
+.badge.info{background:rgba(29,100,200,.15);color:#7ab8ff;border-color:rgba(29,100,200,.3);}
+.save-lib-btn{width:100%;padding:12px;margin-top:12px;border-radius:10px;border:1px solid rgba(29,158,117,.4);background:rgba(29,158,117,.1);color:var(--accent);font-family:'Barlow',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.save-lib-btn:active{background:rgba(29,158,117,.2);}
 .hint{font-size:12px;color:var(--text2);margin-top:6px;text-align:center;}
 .clear-btn{font-size:12px;color:var(--text2);background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:8px;width:100%;}
-.clear-btn:active{background:rgba(255,255,255,0.06);}
-.lib-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.lib-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--text);}
-.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);}
-.icon-btn:active{background:rgba(255,255,255,0.1);}
+.clear-btn:active{background:rgba(255,255,255,.06);}
+
+/* ── Lightbox ── */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+#lightbox.hidden{display:none;}
+#lightboxImg{max-width:100%;max-height:80vh;border-radius:10px;object-fit:contain;}
+#lightboxLabel{margin-top:12px;font-size:13px;color:var(--text2);}
+#lightboxClose{position:absolute;top:calc(var(--safe-top)+12px);right:16px;width:36px;height:36px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#lightboxSave{margin-top:14px;padding:10px 28px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+#lightboxSave:active{opacity:.85;}
+
+/* ── Library ── */
+.lib-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.lib-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;flex:1;}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);flex-shrink:0;}
+.icon-btn:active{background:rgba(255,255,255,.1);}
 .lib-empty{text-align:center;padding:48px 24px;color:var(--text2);}
-.lib-empty-sub{font-size:13px;color:var(--text2);opacity:0.6;margin-top:6px;}
+.lib-empty-sub{font-size:13px;opacity:.6;margin-top:6px;}
+
+/* Breadcrumb */
+#breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.bc-item{font-size:13px;color:var(--text2);cursor:pointer;}
+.bc-item:hover{color:var(--text);}
+.bc-item.current{color:var(--text);font-weight:500;cursor:default;}
+.bc-sep{font-size:13px;color:var(--text2);}
+
+/* Folder grid */
 .lib-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
-.lib-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);cursor:pointer;position:relative;}
-.lib-item:active{opacity:0.8;}
+
+/* Folder item */
+.folder-item{border:1px solid var(--border);border-radius:12px;background:var(--card);cursor:pointer;padding:14px 12px;display:flex;align-items:center;gap:12px;position:relative;}
+.folder-item:active{opacity:.8;}
+.folder-icon-wrap{flex-shrink:0;}
+.folder-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.folder-circle-left{position:absolute;left:0;top:0;width:50%;height:100%;}
+.folder-circle-right{position:absolute;right:0;top:0;width:50%;height:100%;}
+.folder-circle svg{position:relative;z-index:1;}
+.folder-name{font-size:13px;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.folder-count{font-size:11px;color:var(--text2);margin-top:2px;}
+.item-del{position:absolute;top:8px;right:8px;width:22px;height:22px;background:rgba(0,0,0,.5);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;opacity:0;}
+.folder-item:hover .item-del,.lib-lure-item:hover .item-del{opacity:1;}
+
+/* Lure item in library */
+.lib-lure-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);cursor:pointer;position:relative;}
+.lib-lure-item:active{opacity:.8;}
 .lib-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#111;}
-.lib-name{padding:8px 10px 4px;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lib-name{padding:8px 10px 4px;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lib-meta{padding:0 10px 8px;font-size:11px;color:var(--text2);}
-.lib-del{position:absolute;top:6px;right:6px;width:26px;height:26px;background:rgba(0,0,0,0.6);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:flex-end;justify-content:center;padding-bottom:var(--safe-bot);}
+.lib-lure-item .item-del{top:6px;right:6px;opacity:1;}
+
+/* ── Modals ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
 .modal-overlay.hidden{display:none;}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px 18px 0 0;width:100%;max-width:500px;padding:20px 16px 24px;}
-.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:14px;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px 18px 0 0;width:100%;max-width:500px;padding:20px 16px calc(24px + var(--safe-bot));}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;margin-bottom:16px;}
 .modal input[type=text]{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:12px;}
-.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
 .btn-cancel{padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text2);font-family:'Barlow',sans-serif;font-size:15px;cursor:pointer;}
-.btn-save{padding:12px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
-#installBanner{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg2);border-top:1px solid var(--border);padding:14px 16px calc(14px + var(--safe-bot));display:flex;align-items:center;gap:12px;}
+.btn-primary{padding:12px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+
+/* Color pickers for folder */
+.color-pick-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.color-pick-label{font-size:13px;color:var(--text2);min-width:80px;}
+input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);cursor:pointer;}
+.folder-preview{width:56px;height:56px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0;border:2px solid var(--border);}
+.fp-left{position:absolute;left:0;top:0;width:50%;height:100%;}
+.fp-right{position:absolute;right:0;top:0;width:50%;height:100%;}
+
+/* Save-to-folder select */
+.folder-select-list{max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;margin-bottom:12px;}
+.folder-select-item{padding:10px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.folder-select-item:last-child{border-bottom:none;}
+.folder-select-item:active{background:rgba(255,255,255,.06);}
+.folder-select-item.selected{background:rgba(29,158,117,.12);color:var(--accent);}
+.fsi-circle{width:24px;height:24px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0;}
+.fsi-left{position:absolute;left:0;top:0;width:50%;height:100%;}
+.fsi-right{position:absolute;right:0;top:0;width:50%;height:100%;}
+
+/* Install banner */
+#installBanner{position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--bg2);border-top:1px solid var(--border);padding:14px 16px calc(14px + var(--safe-bot));display:flex;align-items:center;gap:12px;}
 #installBanner.hidden{display:none;}
 .install-text{flex:1;font-size:13px;color:var(--text2);line-height:1.4;}
 .install-text strong{color:var(--text);display:block;margin-bottom:2px;}
 .install-btn{padding:9px 16px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
-.install-close{width:28px;height:28px;background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;flex-shrink:0;}
+.install-close{width:28px;height:28px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;flex-shrink:0;}
 #fileInput,#libFileInput{display:none;}
 </style>
 </head>
@@ -121,7 +174,7 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
 
   <div id="content">
 
-    <!-- SIMULATE PAGE -->
+    <!-- ══ SIMULATE PAGE ══ -->
     <div class="page active" id="page-simulate">
 
       <div class="card">
@@ -140,15 +193,15 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
       </div>
 
       <div class="card" id="modeCard" style="display:none;">
-        <div class="card-title">2 — Background removal method</div>
+        <div class="card-title">2 — Background removal</div>
         <div class="mode-grid">
           <button class="mode-btn active" id="btnSolid" onclick="setMode('solid')">
             <div class="mode-btn-title">Color</div>
-            <div class="mode-btn-sub">Tap solid background to mask</div>
+            <div class="mode-btn-sub">Tap solid background</div>
           </button>
           <button class="mode-btn" id="btnCircle" onclick="setMode('circle')">
             <div class="mode-btn-title">Draw</div>
-            <div class="mode-btn-sub">Circle the lure to isolate it</div>
+            <div class="mode-btn-sub">Circle the lure</div>
           </button>
           <button class="mode-btn" id="btnNone" onclick="setMode('none')">
             <div class="mode-btn-title">None</div>
@@ -157,12 +210,9 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
         </div>
       </div>
 
-      <!-- Solid color sampler -->
       <div class="card" id="solidCard" style="display:none;">
         <div class="card-title">3 — Tap the background color</div>
-        <div class="canvas-wrap">
-          <canvas id="samplerCanvas"></canvas>
-        </div>
+        <div class="canvas-wrap"><canvas id="samplerCanvas"></canvas></div>
         <div class="tol-row">
           <span class="ctrl-label" style="min-width:72px;font-size:12px;">Tolerance</span>
           <input type="range" min="5" max="120" value="35" step="1" id="tolSlider">
@@ -172,12 +222,9 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
         <div class="hint" id="samplerHint">Tap background — blue shows what's masked</div>
       </div>
 
-      <!-- Circle draw -->
       <div class="card" id="circleCard" style="display:none;">
         <div class="card-title">3 — Draw a circle around the lure</div>
-        <div class="canvas-wrap">
-          <canvas id="circleCanvas"></canvas>
-        </div>
+        <div class="canvas-wrap"><canvas id="circleCanvas"></canvas></div>
         <div class="hint" id="circleHint">Drag to draw a circle around the lure</div>
         <button class="clear-btn" onclick="clearCircle()">Clear circle</button>
       </div>
@@ -208,7 +255,7 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
       </div>
 
       <div class="card" id="resultsCard" style="display:none;">
-        <div class="card-title">Results</div>
+        <div class="card-title">Results — tap bass vision to enlarge</div>
         <div class="results-grid">
           <div class="result-card">
             <canvas id="origCanvas" class="result-canvas"></canvas>
@@ -216,7 +263,7 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
               <div class="result-title">Original</div>
               <div class="result-sub">Out of water</div>
             </div>
-            <button class="dl-btn" onclick="downloadCanvas('origCanvas','lure_original.jpg')">Save</button>
+            <button class="dl-btn" onclick="saveToPhotos('origCanvas','lure_original.jpg')">Save to Photos</button>
           </div>
           <div class="result-card">
             <canvas id="waterCanvas" class="result-canvas"></canvas>
@@ -224,15 +271,15 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
               <div class="result-title">Underwater</div>
               <div class="result-sub" id="waterSub">Human view</div>
             </div>
-            <button class="dl-btn" onclick="downloadCanvas('waterCanvas','lure_underwater.jpg')">Save</button>
+            <button class="dl-btn" onclick="saveToPhotos('waterCanvas','lure_underwater.jpg')">Save to Photos</button>
           </div>
           <div class="result-card">
-            <canvas id="bassCanvas" class="result-canvas"></canvas>
+            <canvas id="bassCanvas" class="result-canvas clickable" onclick="openLightbox()"></canvas>
             <div class="result-label">
-              <div class="result-title">Bass vision</div>
+              <div class="result-title">Bass vision <span style="font-size:10px;color:var(--accent);">tap to enlarge</span></div>
               <div class="result-sub" id="bassSub">Fish view</div>
             </div>
-            <button class="dl-btn" onclick="downloadCanvas('bassCanvas','lure_bass_vision.jpg')">Save</button>
+            <button class="dl-btn" onclick="saveToPhotos('bassCanvas','lure_bass_vision.jpg')">Save to Photos</button>
           </div>
         </div>
         <div class="badges" id="badges"></div>
@@ -244,15 +291,19 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
 
     </div><!-- /simulate -->
 
-    <!-- LIBRARY PAGE -->
+    <!-- ══ LIBRARY PAGE ══ -->
     <div class="page" id="page-library">
       <div class="lib-header">
         <div class="lib-title">My Lures</div>
-        <button class="icon-btn" onclick="document.getElementById('libFileInput').click()">
+        <button class="icon-btn" title="New folder" onclick="openFolderModal()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4h5l2 2h7v10H2V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 9v6M6 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="icon-btn" title="Add lure" onclick="document.getElementById('libFileInput').click()">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
       </div>
       <input type="file" id="libFileInput" accept="image/*">
+      <div id="breadcrumb" style="display:none;"></div>
       <div id="libContent"></div>
     </div>
 
@@ -270,26 +321,59 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
   </nav>
 </div>
 
-<!-- Save modal -->
+<!-- ══ Lightbox ══ -->
+<div id="lightbox" class="hidden">
+  <button id="lightboxClose" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="Bass vision">
+  <div id="lightboxLabel">Bass vision</div>
+  <button id="lightboxSave" onclick="lightboxSaveToPhotos()">Save to Photos</button>
+</div>
+
+<!-- ══ Save to library modal ══ -->
 <div class="modal-overlay hidden" id="saveModal">
   <div class="modal">
     <div class="modal-title">Save to Library</div>
     <input type="text" id="lureName" placeholder="Lure name (e.g. Chartreuse Shad Rap)">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">Save to folder (optional)</div>
+    <div class="folder-select-list" id="folderSelectList"></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeSaveModal()">Cancel</button>
-      <button class="btn-save" onclick="saveToLibrary()">Save</button>
+      <button class="btn-primary" onclick="saveToLibrary()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- Install banner -->
+<!-- ══ New folder modal ══ -->
+<div class="modal-overlay hidden" id="folderModal">
+  <div class="modal">
+    <div class="modal-title" id="folderModalTitle">New Folder</div>
+    <input type="text" id="folderName" placeholder="Folder name (e.g. Chartreuse, Red/Orange)">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Choose two colors for the folder icon</div>
+    <div class="color-pick-row">
+      <span class="color-pick-label">Left color</span>
+      <input type="color" id="folderColor1" value="#ff8c00">
+      <input type="color" id="folderColor2" value="#ff0000">
+      <span class="color-pick-label" style="text-align:center;">Right color</span>
+      <div class="folder-preview" id="folderPreview">
+        <div class="fp-left" id="fpLeft" style="background:#ff8c00;"></div>
+        <div class="fp-right" id="fpRight" style="background:#ff0000;"></div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeFolderModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveFolder()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Install banner ══ -->
 <div id="installBanner" class="hidden">
   <div class="install-text">
     <strong>Add to Home Screen</strong>
     Install Bass Vision for quick access
   </div>
   <button class="install-btn" id="installBtn">Install</button>
-  <button class="install-close" onclick="document.getElementById('installBanner').classList.add('hidden')">×</button>
+  <button class="install-close" onclick="document.getElementById('installBanner').classList.add('hidden')">✕</button>
 </div>
 
 <script>
@@ -305,10 +389,7 @@ window.addEventListener('beforeinstallprompt', e => {
 document.getElementById('installBtn').addEventListener('click', () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(() => {
-    deferredPrompt = null;
-    document.getElementById('installBanner').classList.add('hidden');
-  });
+  deferredPrompt.userChoice.then(() => { deferredPrompt = null; document.getElementById('installBanner').classList.add('hidden'); });
 });
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
@@ -320,430 +401,466 @@ function showPage(name) {
   if (name === 'library') renderLibrary();
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// ── Water physics ─────────────────────────────────────────────────────────────
 const waterParams = {
-  clear:{ra:0.038,ga:0.015,ba:0.006,tint:[0,2,18],clarity:1.0},
-  green:{ra:0.065,ga:0.010,ba:0.022,tint:[0,14,8],clarity:0.55},
-  brown:{ra:0.095,ga:0.032,ba:0.038,tint:[14,7,0],clarity:0.28}
+  clear:{ra:.038,ga:.015,ba:.006,tint:[0,2,18],clarity:1.0},
+  green:{ra:.065,ga:.010,ba:.022,tint:[0,14,8],clarity:.55},
+  brown:{ra:.095,ga:.032,ba:.038,tint:[14,7,0],clarity:.28}
 };
-const lightMult = {bright:1.0,overcast:0.72,low:0.48};
+const lightMult = {bright:1.0,overcast:.72,low:.48};
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let sourceImage = null;
-let fullResPixels = null;
-let fullW = 0, fullH = 0;
-let lureMask = null;
-let bgColor = null;
-let currentMode = 'solid';
-// Circle draw state
-let circleCenter = null, circleRadius = 0;
-let isDrawing = false, drawStart = null;
+let sourceImage=null, fullResPixels=null, fullW=0, fullH=0;
+let lureMask=null, bgColor=null, currentMode='solid';
+let circleCenter=null, circleRadius=0, isDrawing=false, drawStart=null;
 
-// ── File upload ───────────────────────────────────────────────────────────────
+// ── File load ─────────────────────────────────────────────────────────────────
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
-dropZone.addEventListener('dragover', e=>{e.preventDefault();dropZone.classList.add('drag');});
-dropZone.addEventListener('dragleave', ()=>dropZone.classList.remove('drag'));
-dropZone.addEventListener('drop', e=>{
-  e.preventDefault();dropZone.classList.remove('drag');
-  const f=e.dataTransfer.files[0];
-  if(f&&f.type.startsWith('image/'))loadFile(f);
-});
-fileInput.addEventListener('change', e=>{if(e.target.files[0])loadFile(e.target.files[0]);});
+dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag');});
+dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadFile(f);});
+fileInput.addEventListener('change',e=>{if(e.target.files[0])loadFile(e.target.files[0]);});
 
 function loadFile(file) {
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
     img.onload = () => {
-      sourceImage = img;
-      document.getElementById('dropTitle').textContent = file.name;
-      document.getElementById('dropSub').textContent = img.width + ' × ' + img.height;
-      lureMask = null; bgColor = null; circleCenter = null; circleRadius = 0;
+      sourceImage=img;
+      document.getElementById('dropTitle').textContent=file.name;
+      document.getElementById('dropSub').textContent=img.width+' × '+img.height;
+      lureMask=null;bgColor=null;circleCenter=null;circleRadius=0;
       setupCanvases();
-      document.getElementById('modeCard').style.display = '';
-      document.getElementById('condCard').style.display = '';
-      document.getElementById('resultsCard').style.display = '';
+      ['modeCard','condCard','resultsCard'].forEach(id=>document.getElementById(id).style.display='');
       setMode('solid');
     };
-    img.src = ev.target.result;
+    img.src=ev.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-// ── Setup canvases ────────────────────────────────────────────────────────────
+// ── Canvases ──────────────────────────────────────────────────────────────────
 function setupCanvases() {
-  const maxW = Math.min(window.innerWidth - 64, 600);
-  const scale = Math.min(maxW / sourceImage.width, 320 / sourceImage.height, 1);
-  fullW = Math.round(sourceImage.width * scale);
-  fullH = Math.round(sourceImage.height * scale);
-
-  // Sampler canvas
-  const sc = document.getElementById('samplerCanvas');
-  sc.width = fullW; sc.height = fullH;
-  const sctx = sc.getContext('2d');
-  sctx.drawImage(sourceImage, 0, 0, fullW, fullH);
-  fullResPixels = sctx.getImageData(0, 0, fullW, fullH);
-
-  // Circle canvas
-  const cc = document.getElementById('circleCanvas');
-  cc.width = fullW; cc.height = fullH;
+  const maxW=Math.min(window.innerWidth-64,600);
+  const scale=Math.min(maxW/sourceImage.width,320/sourceImage.height,1);
+  fullW=Math.round(sourceImage.width*scale);
+  fullH=Math.round(sourceImage.height*scale);
+  const sc=document.getElementById('samplerCanvas');
+  sc.width=fullW;sc.height=fullH;
+  const sctx=sc.getContext('2d');
+  sctx.drawImage(sourceImage,0,0,fullW,fullH);
+  fullResPixels=sctx.getImageData(0,0,fullW,fullH);
+  const cc=document.getElementById('circleCanvas');
+  cc.width=fullW;cc.height=fullH;
   redrawCircleCanvas();
 
-  // Tap/touch handlers for sampler
-  function handleSamplerTap(clientX, clientY) {
-    if (currentMode !== 'solid') return;
-    const rect = sc.getBoundingClientRect();
-    const px = Math.round((clientX - rect.left) * (fullW / rect.width));
-    const py = Math.round((clientY - rect.top) * (fullH / rect.height));
-    if (px < 0 || py < 0 || px >= fullW || py >= fullH) return;
-    const idx = (py * fullW + px) * 4;
-    const d = fullResPixels.data;
-    bgColor = {r:d[idx],g:d[idx+1],b:d[idx+2]};
-    document.getElementById('bgSwatch').style.background = `rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-    buildMaskSolid(); processImage();
+  function samplerTap(cx,cy) {
+    if(currentMode!=='solid')return;
+    const rect=sc.getBoundingClientRect();
+    const px=Math.round((cx-rect.left)*(fullW/rect.width));
+    const py=Math.round((cy-rect.top)*(fullH/rect.height));
+    if(px<0||py<0||px>=fullW||py>=fullH)return;
+    const idx=(py*fullW+px)*4,d=fullResPixels.data;
+    bgColor={r:d[idx],g:d[idx+1],b:d[idx+2]};
+    document.getElementById('bgSwatch').style.background=`rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
+    buildMaskSolid();processImage();
   }
-  sc.addEventListener('click', e => handleSamplerTap(e.clientX, e.clientY));
-  sc.addEventListener('touchend', e => {
-    e.preventDefault();
-    const t = e.changedTouches[0];
-    handleSamplerTap(t.clientX, t.clientY);
-  }, {passive:false});
-
-  // Circle draw handlers
+  sc.addEventListener('click',e=>samplerTap(e.clientX,e.clientY));
+  sc.addEventListener('touchend',e=>{e.preventDefault();const t=e.changedTouches[0];samplerTap(t.clientX,t.clientY);},{passive:false});
   setupCircleDrawing();
 }
 
-// ── Circle drawing ────────────────────────────────────────────────────────────
+// ── Circle ────────────────────────────────────────────────────────────────────
 function setupCircleDrawing() {
-  const cc = document.getElementById('circleCanvas');
-
-  function getPos(clientX, clientY) {
-    const rect = cc.getBoundingClientRect();
-    return {
-      x: (clientX - rect.left) * (fullW / rect.width),
-      y: (clientY - rect.top)  * (fullH / rect.height)
-    };
-  }
-
-  function onStart(x, y) {
-    isDrawing = true;
-    drawStart = {x, y};
-    circleCenter = null; circleRadius = 0;
-  }
-  function onMove(x, y) {
-    if (!isDrawing) return;
-    const dx = x - drawStart.x, dy = y - drawStart.y;
-    circleRadius = Math.sqrt(dx*dx + dy*dy) / 2;
-    circleCenter = {x: drawStart.x + dx/2, y: drawStart.y + dy/2};
-    redrawCircleCanvas();
-  }
-  function onEnd() {
-    if (!isDrawing) return;
-    isDrawing = false;
-    if (circleCenter && circleRadius > 5) {
-      buildMaskCircle();
-      processImage();
-      document.getElementById('circleHint').textContent = 'Circle set — drag again to redraw';
-    }
-  }
-
-  cc.addEventListener('mousedown', e => { onStart(...Object.values(getPos(e.clientX, e.clientY))); });
-  cc.addEventListener('mousemove', e => { onMove(...Object.values(getPos(e.clientX, e.clientY))); });
-  cc.addEventListener('mouseup', onEnd);
-  cc.addEventListener('mouseleave', onEnd);
-
-  cc.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    const p = getPos(t.clientX, t.clientY);
-    onStart(p.x, p.y);
-  }, {passive:false});
-  cc.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    const p = getPos(t.clientX, t.clientY);
-    onMove(p.x, p.y);
-  }, {passive:false});
-  cc.addEventListener('touchend', e => { e.preventDefault(); onEnd(); }, {passive:false});
+  const cc=document.getElementById('circleCanvas');
+  function pos(cx,cy){const r=cc.getBoundingClientRect();return{x:(cx-r.left)*(fullW/r.width),y:(cy-r.top)*(fullH/r.height)};}
+  function start(x,y){isDrawing=true;drawStart={x,y};circleCenter=null;circleRadius=0;}
+  function move(x,y){if(!isDrawing)return;const dx=x-drawStart.x,dy=y-drawStart.y;circleRadius=Math.sqrt(dx*dx+dy*dy)/2;circleCenter={x:drawStart.x+dx/2,y:drawStart.y+dy/2};redrawCircleCanvas();}
+  function end(){if(!isDrawing)return;isDrawing=false;if(circleCenter&&circleRadius>5){buildMaskCircle();processImage();document.getElementById('circleHint').textContent='Circle set — drag again to redraw';}}
+  cc.addEventListener('mousedown',e=>{const p=pos(e.clientX,e.clientY);start(p.x,p.y);});
+  cc.addEventListener('mousemove',e=>{const p=pos(e.clientX,e.clientY);move(p.x,p.y);});
+  cc.addEventListener('mouseup',end);cc.addEventListener('mouseleave',end);
+  cc.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0],p=pos(t.clientX,t.clientY);start(p.x,p.y);},{passive:false});
+  cc.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0],p=pos(t.clientX,t.clientY);move(p.x,p.y);},{passive:false});
+  cc.addEventListener('touchend',e=>{e.preventDefault();end();},{passive:false});
 }
-
-function redrawCircleCanvas() {
-  const cc = document.getElementById('circleCanvas');
-  const ctx = cc.getContext('2d');
-  ctx.clearRect(0, 0, fullW, fullH);
-  ctx.drawImage(sourceImage, 0, 0, fullW, fullH);
-  if (circleCenter && circleRadius > 0) {
-    // Dim outside
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(0, 0, fullW, fullH);
-    ctx.arc(circleCenter.x, circleCenter.y, circleRadius, 0, Math.PI*2, true);
-    ctx.fillStyle = 'rgba(0,0,0,0.45)';
-    ctx.fill('evenodd');
-    ctx.restore();
-    // Circle outline
-    ctx.beginPath();
-    ctx.arc(circleCenter.x, circleCenter.y, circleRadius, 0, Math.PI*2);
-    ctx.strokeStyle = '#1d9e75';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6, 4]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    // Center dot
-    ctx.beginPath();
-    ctx.arc(circleCenter.x, circleCenter.y, 3, 0, Math.PI*2);
-    ctx.fillStyle = '#1d9e75';
-    ctx.fill();
+function redrawCircleCanvas(){
+  const cc=document.getElementById('circleCanvas'),ctx=cc.getContext('2d');
+  ctx.clearRect(0,0,fullW,fullH);ctx.drawImage(sourceImage,0,0,fullW,fullH);
+  if(circleCenter&&circleRadius>0){
+    ctx.save();ctx.beginPath();ctx.rect(0,0,fullW,fullH);ctx.arc(circleCenter.x,circleCenter.y,circleRadius,0,Math.PI*2,true);ctx.fillStyle='rgba(0,0,0,.45)';ctx.fill('evenodd');ctx.restore();
+    ctx.beginPath();ctx.arc(circleCenter.x,circleCenter.y,circleRadius,0,Math.PI*2);ctx.strokeStyle='#1d9e75';ctx.lineWidth=2;ctx.setLineDash([6,4]);ctx.stroke();ctx.setLineDash([]);
+    ctx.beginPath();ctx.arc(circleCenter.x,circleCenter.y,3,0,Math.PI*2);ctx.fillStyle='#1d9e75';ctx.fill();
   }
 }
-
-function clearCircle() {
-  circleCenter = null; circleRadius = 0; lureMask = null;
-  redrawCircleCanvas();
-  document.getElementById('circleHint').textContent = 'Drag to draw a circle around the lure';
-  processImage();
+function clearCircle(){circleCenter=null;circleRadius=0;lureMask=null;redrawCircleCanvas();document.getElementById('circleHint').textContent='Drag to draw a circle around the lure';processImage();}
+function buildMaskCircle(){
+  if(!circleCenter||circleRadius<=0)return;
+  lureMask=new Uint8Array(fullW*fullH);
+  const r2=circleRadius*circleRadius;
+  for(let y=0;y<fullH;y++)for(let x=0;x<fullW;x++)lureMask[y*fullW+x]=(((x-circleCenter.x)**2+(y-circleCenter.y)**2)<=r2)?1:0;
 }
 
-function buildMaskCircle() {
-  if (!circleCenter || circleRadius <= 0) return;
-  const n = fullW * fullH;
-  lureMask = new Uint8Array(n);
-  const cx = circleCenter.x, cy = circleCenter.y, r2 = circleRadius * circleRadius;
-  for (let y = 0; y < fullH; y++) {
-    for (let x = 0; x < fullW; x++) {
-      const dx = x - cx, dy = y - cy;
-      lureMask[y * fullW + x] = (dx*dx + dy*dy) <= r2 ? 1 : 0;
-    }
-  }
-}
-
-// ── Solid color mask ──────────────────────────────────────────────────────────
-function colorDist(r1,g1,b1,r2,g2,b2) {
-  return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2);
-}
-
-function buildMaskSolid() {
-  if (!bgColor) return;
-  const tol = parseInt(document.getElementById('tolSlider').value);
-  const d = fullResPixels.data;
-  lureMask = new Uint8Array(fullW * fullH);
-  for (let i = 0; i < fullW * fullH; i++) {
-    const idx = i * 4;
-    lureMask[i] = colorDist(d[idx],d[idx+1],d[idx+2],bgColor.r,bgColor.g,bgColor.b) > tol ? 1 : 0;
-  }
-  document.getElementById('samplerHint').textContent = 'Background masked — adjust tolerance to refine';
+// ── Solid mask ────────────────────────────────────────────────────────────────
+function colorDist(r1,g1,b1,r2,g2,b2){return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2);}
+function buildMaskSolid(){
+  if(!bgColor)return;
+  const tol=parseInt(document.getElementById('tolSlider').value),d=fullResPixels.data;
+  lureMask=new Uint8Array(fullW*fullH);
+  for(let i=0;i<fullW*fullH;i++){const idx=i*4;lureMask[i]=colorDist(d[idx],d[idx+1],d[idx+2],bgColor.r,bgColor.g,bgColor.b)>tol?1:0;}
+  document.getElementById('samplerHint').textContent='Background masked — adjust tolerance to refine';
   refreshSamplerOverlay();
 }
-
-function refreshSamplerOverlay() {
-  const sc = document.getElementById('samplerCanvas');
-  const ctx = sc.getContext('2d');
-  ctx.drawImage(sourceImage, 0, 0, fullW, fullH);
-  if (!lureMask) return;
-  const img = ctx.getImageData(0, 0, fullW, fullH);
-  const d = img.data;
-  for (let i = 0; i < fullW * fullH; i++) {
-    if (!lureMask[i]) { d[i*4]=60;d[i*4+1]=140;d[i*4+2]=255;d[i*4+3]=160; }
-  }
-  ctx.putImageData(img, 0, 0);
+function refreshSamplerOverlay(){
+  const sc=document.getElementById('samplerCanvas'),ctx=sc.getContext('2d');
+  ctx.drawImage(sourceImage,0,0,fullW,fullH);
+  if(!lureMask)return;
+  const img=ctx.getImageData(0,0,fullW,fullH),d=img.data;
+  for(let i=0;i<fullW*fullH;i++)if(!lureMask[i]){d[i*4]=60;d[i*4+1]=140;d[i*4+2]=255;d[i*4+3]=160;}
+  ctx.putImageData(img,0,0);
 }
 
-// ── Mode switching ────────────────────────────────────────────────────────────
-function setMode(mode) {
-  currentMode = mode;
-  ['solid','circle','none'].forEach(m => {
-    document.getElementById('btn'+m.charAt(0).toUpperCase()+m.slice(1)).className =
-      'mode-btn' + (m === mode ? ' active' : '');
-  });
-  document.getElementById('solidCard').style.display  = mode === 'solid'  ? '' : 'none';
-  document.getElementById('circleCard').style.display = mode === 'circle' ? '' : 'none';
-  const stepNum = mode === 'none' ? '3' : '4';
-  document.getElementById('condLabel').textContent = stepNum + ' — Water conditions';
-
-  if (mode !== 'solid' && mode !== 'circle') { lureMask = null; }
-  if (mode === 'solid') refreshSamplerOverlay();
-  if (mode === 'circle') redrawCircleCanvas();
+// ── Mode ──────────────────────────────────────────────────────────────────────
+function setMode(mode){
+  currentMode=mode;
+  ['solid','circle','none'].forEach(m=>document.getElementById('btn'+m[0].toUpperCase()+m.slice(1)).className='mode-btn'+(m===mode?' active':''));
+  document.getElementById('solidCard').style.display=mode==='solid'?'':'none';
+  document.getElementById('circleCard').style.display=mode==='circle'?'':'none';
+  document.getElementById('condLabel').textContent=(mode==='none'?'3':'4')+' — Water conditions';
+  if(mode!=='solid'&&mode!=='circle')lureMask=null;
+  if(mode==='solid')refreshSamplerOverlay();
+  if(mode==='circle')redrawCircleCanvas();
   processImage();
 }
 
-// ── Process image ─────────────────────────────────────────────────────────────
-function processImage() {
-  if (!sourceImage) return;
-  const waterType = document.getElementById('waterType').value;
-  const depth     = parseInt(document.getElementById('depthSlider').value);
-  const light     = document.getElementById('lightCond').value;
-  const p = waterParams[waterType];
-  const lm = lightMult[light];
-
-  ['origCanvas','waterCanvas','bassCanvas'].forEach(id => {
-    const c = document.getElementById(id);
-    c.width = fullW; c.height = fullH;
-  });
-
-  const origCtx = document.getElementById('origCanvas').getContext('2d');
-  origCtx.drawImage(sourceImage, 0, 0, fullW, fullH);
-  const src = origCtx.getImageData(0, 0, fullW, fullH).data;
-
-  const redF   = Math.exp(-p.ra * depth);
-  const greenF = Math.exp(-p.ga * depth);
-  const blueF  = Math.exp(-p.ba * depth);
-  const darkF  = Math.max(0.08, lm * Math.exp(-0.016 * depth));
-
-  const waterCtx = document.getElementById('waterCanvas').getContext('2d');
-  const bassCtx  = document.getElementById('bassCanvas').getContext('2d');
-  const waterImg = waterCtx.createImageData(fullW, fullH);
-  const bassImg  = bassCtx.createImageData(fullW, fullH);
-  const wd = waterImg.data, bd = bassImg.data;
-
-  for (let i = 0; i < fullW * fullH; i++) {
-    const px = i*4;
-    const r=src[px],g=src[px+1],b=src[px+2],a=src[px+3];
-    const isLure = !lureMask || lureMask[i] === 1;
+// ── Process ───────────────────────────────────────────────────────────────────
+function processImage(){
+  if(!sourceImage)return;
+  const waterType=document.getElementById('waterType').value;
+  const depth=parseInt(document.getElementById('depthSlider').value);
+  const light=document.getElementById('lightCond').value;
+  const p=waterParams[waterType],lm=lightMult[light];
+  ['origCanvas','waterCanvas','bassCanvas'].forEach(id=>{const c=document.getElementById(id);c.width=fullW;c.height=fullH;});
+  const origCtx=document.getElementById('origCanvas').getContext('2d');
+  origCtx.drawImage(sourceImage,0,0,fullW,fullH);
+  const src=origCtx.getImageData(0,0,fullW,fullH).data;
+  const redF=Math.exp(-p.ra*depth),greenF=Math.exp(-p.ga*depth),blueF=Math.exp(-p.ba*depth);
+  const darkF=Math.max(.08,lm*Math.exp(-.016*depth));
+  const wCtx=document.getElementById('waterCanvas').getContext('2d');
+  const bCtx=document.getElementById('bassCanvas').getContext('2d');
+  const wImg=wCtx.createImageData(fullW,fullH),bImg=bCtx.createImageData(fullW,fullH);
+  const wd=wImg.data,bd=bImg.data;
+  for(let i=0;i<fullW*fullH;i++){
+    const px=i*4,r=src[px],g=src[px+1],b=src[px+2],a=src[px+3];
+    const isLure=!lureMask||lureMask[i]===1;
     let wr,wg,wb;
-    if (isLure) {
-      wr = r*redF*darkF   + p.tint[0]*(1-redF)*lm*darkF;
-      wg = g*greenF*darkF + p.tint[1]*(1-greenF)*lm*darkF;
-      wb = b*blueF*darkF  + p.tint[2]*(1-blueF)*lm*darkF;
-    } else { wr=r;wg=g;wb=b; }
-    wd[px]=Math.max(0,Math.min(255,wr));
-    wd[px+1]=Math.max(0,Math.min(255,wg));
-    wd[px+2]=Math.max(0,Math.min(255,wb));
-    wd[px+3]=a;
+    if(isLure){wr=r*redF*darkF+p.tint[0]*(1-redF)*lm*darkF;wg=g*greenF*darkF+p.tint[1]*(1-greenF)*lm*darkF;wb=b*blueF*darkF+p.tint[2]*(1-blueF)*lm*darkF;}
+    else{wr=r;wg=g;wb=b;}
+    wd[px]=Math.max(0,Math.min(255,wr));wd[px+1]=Math.max(0,Math.min(255,wg));wd[px+2]=Math.max(0,Math.min(255,wb));wd[px+3]=a;
     let br,bg_,bb;
-    if (isLure) {
-      br=0.95*wr+0.05*wg; bg_=0.43*wg+0.57*wb; bb=0.48*wg+0.52*wb;
-    } else { br=r;bg_=g;bb=b; }
-    bd[px]=Math.max(0,Math.min(255,br));
-    bd[px+1]=Math.max(0,Math.min(255,bg_));
-    bd[px+2]=Math.max(0,Math.min(255,bb));
-    bd[px+3]=a;
+    if(isLure){br=.95*wr+.05*wg;bg_=.43*wg+.57*wb;bb=.48*wg+.52*wb;}else{br=r;bg_=g;bb=b;}
+    bd[px]=Math.max(0,Math.min(255,br));bd[px+1]=Math.max(0,Math.min(255,bg_));bd[px+2]=Math.max(0,Math.min(255,bb));bd[px+3]=a;
   }
-  waterCtx.putImageData(waterImg,0,0);
-  bassCtx.putImageData(bassImg,0,0);
-
-  document.getElementById('waterSub').textContent = depth+' ft · '+waterType;
-  document.getElementById('bassSub').textContent  = 'Tritanopia · '+depth+' ft';
-
-  const effDepth = depth/(p.clarity*lm);
+  wCtx.putImageData(wImg,0,0);bCtx.putImageData(bImg,0,0);
+  document.getElementById('waterSub').textContent=depth+' ft · '+waterType;
+  document.getElementById('bassSub').textContent='Tritanopia · '+depth+' ft';
+  const effDepth=depth/(p.clarity*lm);
   let visCls='ok',visLabel='Good visibility';
   if(effDepth>20){visCls='warn';visLabel='Very poor visibility';}
   else if(effDepth>12){visCls='warn';visLabel='Poor visibility';}
   else if(effDepth>5){visCls='';visLabel='Moderate visibility';}
-
-  const redGone = depth > {clear:9,green:5,brown:3}[waterType];
-  const lightLabel = {bright:'Bright sun',overcast:'Overcast',low:'Low light'}[light];
-  const maskBadge = lureMask
-    ? (currentMode==='circle'
-        ? '<span class="badge ok">Circle mask</span>'
-        : '<span class="badge ok">Color mask</span>')
-    : '<span class="badge info">Full image filtered</span>';
-  document.getElementById('badges').innerHTML =
-    maskBadge +
-    `<span class="badge ${visCls}">${visLabel}</span>` +
-    (redGone?'<span class="badge warn">Red absorbed</span>':'') +
-    `<span class="badge">${depth} ft · ${waterType} · ${lightLabel}</span>`;
-}
-
-// ── Download ──────────────────────────────────────────────────────────────────
-function downloadCanvas(id, filename) {
-  const c = document.getElementById(id);
-  const link = document.createElement('a');
-  link.download = filename; link.href = c.toDataURL('image/jpeg',0.92); link.click();
+  const redGone=depth>{clear:9,green:5,brown:3}[waterType];
+  const lightLabel={bright:'Bright sun',overcast:'Overcast',low:'Low light'}[light];
+  const maskBadge=lureMask?(currentMode==='circle'?'<span class="badge ok">Circle mask</span>':'<span class="badge ok">Color mask</span>'):'<span class="badge info">Full image filtered</span>';
+  document.getElementById('badges').innerHTML=maskBadge+`<span class="badge ${visCls}">${visLabel}</span>`+(redGone?'<span class="badge warn">Red absorbed</span>':'')+`<span class="badge">${depth} ft · ${waterType} · ${lightLabel}</span>`;
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────
-document.getElementById('depthSlider').addEventListener('input', function(){
-  document.getElementById('depthVal').textContent = this.value+' ft'; processImage();
-});
-document.getElementById('tolSlider').addEventListener('input', function(){
-  document.getElementById('tolVal').textContent = this.value; buildMaskSolid(); processImage();
-});
-document.getElementById('waterType').addEventListener('change', processImage);
-document.getElementById('lightCond').addEventListener('change', processImage);
+document.getElementById('depthSlider').addEventListener('input',function(){document.getElementById('depthVal').textContent=this.value+' ft';processImage();});
+document.getElementById('tolSlider').addEventListener('input',function(){document.getElementById('tolVal').textContent=this.value;buildMaskSolid();processImage();});
+document.getElementById('waterType').addEventListener('change',processImage);
+document.getElementById('lightCond').addEventListener('change',processImage);
 
-// ── Save modal ────────────────────────────────────────────────────────────────
-function openSaveModal(){
-  document.getElementById('lureName').value='';
-  document.getElementById('saveModal').classList.remove('hidden');
-  setTimeout(()=>document.getElementById('lureName').focus(),100);
+// ── Save to Photos (iPhone-friendly) ─────────────────────────────────────────
+function saveToPhotos(canvasId, filename) {
+  const canvas = document.getElementById(canvasId);
+  const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+  // On iOS Safari, opening a data URL in a new tab lets user long-press to save to Photos
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS) {
+    // Create a full-screen image page the user can long-press to save
+    const w = window.open('', '_blank');
+    if (w) {
+      w.document.write(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>${filename}</title><style>body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;}img{max-width:100%;max-height:100vh;}</style></head><body><img src="${dataURL}" alt="${filename}"></body></html>`);
+      w.document.close();
+    } else {
+      // Popup blocked fallback
+      iosPhotoFallback(dataURL, filename);
+    }
+  } else {
+    // Desktop / Android — direct download
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataURL;
+    link.click();
+  }
 }
-function closeSaveModal(){document.getElementById('saveModal').classList.add('hidden');}
-function saveToLibrary(){
-  const name=document.getElementById('lureName').value.trim()||'Unnamed Lure';
-  const dataURL=document.getElementById('origCanvas').toDataURL('image/jpeg',0.85);
-  const lures=getLibrary();
-  lures.unshift({id:Date.now(),name,dataURL,added:new Date().toLocaleDateString()});
-  saveLibrary(lures);
-  closeSaveModal();
-  showPage('library');
+
+function iosPhotoFallback(dataURL, filename) {
+  // Show the image in lightbox with instructions
+  document.getElementById('lightboxImg').src = dataURL;
+  document.getElementById('lightboxLabel').textContent = 'Long-press the image and tap "Add to Photos"';
+  document.getElementById('lightboxSave').style.display = 'none';
+  document.getElementById('lightbox').classList.remove('hidden');
 }
-document.getElementById('saveModal').addEventListener('click',e=>{
-  if(e.target===document.getElementById('saveModal'))closeSaveModal();
-});
 
-// ── Library ───────────────────────────────────────────────────────────────────
-document.getElementById('libFileInput').addEventListener('change',e=>{
-  const file=e.target.files[0]; if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    const name=file.name.replace(/\.[^.]+$/,'');
-    const n=prompt('Name this lure:',name); if(!n)return;
-    const lures=getLibrary();
-    lures.unshift({id:Date.now(),name:n,dataURL:ev.target.result,added:new Date().toLocaleDateString()});
-    saveLibrary(lures); renderLibrary();
-  };
-  reader.readAsDataURL(file);
-  e.target.value='';
-});
+// ── Lightbox ──────────────────────────────────────────────────────────────────
+function openLightbox() {
+  const canvas = document.getElementById('bassCanvas');
+  const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+  document.getElementById('lightboxImg').src = dataURL;
+  const depth = document.getElementById('depthSlider').value;
+  const waterType = document.getElementById('waterType').value;
+  document.getElementById('lightboxLabel').textContent = 'Bass vision · ' + depth + ' ft · ' + waterType;
+  document.getElementById('lightboxSave').style.display = '';
+  document.getElementById('lightbox').classList.remove('hidden');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
+function lightboxSaveToPhotos() { saveToPhotos('bassCanvas','lure_bass_vision.jpg'); }
+document.getElementById('lightbox').addEventListener('click', e => { if(e.target===document.getElementById('lightbox'))closeLightbox(); });
 
-function getLibrary(){try{return JSON.parse(localStorage.getItem('bassVisionLibrary')||'[]');}catch{return[];}}
-function saveLibrary(lures){try{localStorage.setItem('bassVisionLibrary',JSON.stringify(lures));}catch{alert('Storage full — try deleting some lures.');}}
+// ── Library storage ───────────────────────────────────────────────────────────
+function getLibData() {
+  try { return JSON.parse(localStorage.getItem('bassVision_v3') || '{"folders":[],"lures":[]}'); }
+  catch { return {folders:[],lures:[]}; }
+}
+function saveLibData(data) {
+  try { localStorage.setItem('bassVision_v3', JSON.stringify(data)); }
+  catch { alert('Storage full — try deleting some lures.'); }
+}
 
-function renderLibrary(){
-  const lures=getLibrary();
-  const el=document.getElementById('libContent');
-  if(!lures.length){
-    el.innerHTML=`<div class="lib-empty">
-      <div style="font-size:48px;margin-bottom:12px;opacity:.4;">🎣</div>
-      <div style="font-size:15px;font-weight:500;color:var(--text2);">No lures saved yet</div>
-      <div class="lib-empty-sub">Simulate a lure and tap "Save to library"<br>or tap + above to add a photo directly</div>
-    </div>`;
+// ── Current folder in library ─────────────────────────────────────────────────
+let currentFolderId = null; // null = root
+
+// ── Render library ────────────────────────────────────────────────────────────
+function renderLibrary() {
+  const data = getLibData();
+  const bc = document.getElementById('breadcrumb');
+  const el = document.getElementById('libContent');
+
+  // Breadcrumb
+  if (currentFolderId) {
+    const folder = data.folders.find(f => f.id === currentFolderId);
+    bc.style.display = 'flex';
+    bc.innerHTML = `
+      <span class="bc-item" onclick="currentFolderId=null;renderLibrary()">My Lures</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-item current">${folder ? folder.name : '—'}</span>`;
+  } else {
+    bc.style.display = 'none';
+  }
+
+  if (currentFolderId) {
+    // Inside a folder — show lures in that folder
+    const lures = data.lures.filter(l => l.folderId === currentFolderId);
+    if (!lures.length) {
+      el.innerHTML = `<div class="lib-empty"><div style="font-size:40px;margin-bottom:10px;opacity:.4;">🎣</div><div style="font-size:15px;font-weight:500;color:var(--text2);">No lures in this folder</div><div class="lib-empty-sub">Save a lure here from the Simulate tab</div></div>`;
+      return;
+    }
+    el.innerHTML = `<div class="lib-grid">${lures.map(l => lureItemHTML(l)).join('')}</div>`;
     return;
   }
-  el.innerHTML=`<div class="lib-grid">${lures.map(l=>`
-    <div class="lib-item" onclick="loadFromLibrary(${l.id})">
-      <img class="lib-img" src="${l.dataURL}" alt="${l.name}">
-      <button class="lib-del" onclick="event.stopPropagation();deleteLure(${l.id})">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </button>
-      <div class="lib-name">${l.name}</div>
-      <div class="lib-meta">${l.added}</div>
-    </div>`).join('')}</div>`;
+
+  // Root — show folders first, then unfoldered lures
+  const folders = data.folders;
+  const rootLures = data.lures.filter(l => !l.folderId);
+
+  if (!folders.length && !rootLures.length) {
+    el.innerHTML = `<div class="lib-empty"><div style="font-size:48px;margin-bottom:12px;opacity:.4;">🎣</div><div style="font-size:15px;font-weight:500;color:var(--text2);">No lures saved yet</div><div class="lib-empty-sub">Simulate a lure and tap "Save to library"<br>or use the + button to add a photo directly</div></div>`;
+    return;
+  }
+
+  let html = '<div class="lib-grid">';
+  folders.forEach(f => {
+    const count = data.lures.filter(l => l.folderId === f.id).length;
+    html += folderItemHTML(f, count);
+  });
+  rootLures.forEach(l => { html += lureItemHTML(l); });
+  html += '</div>';
+  el.innerHTML = html;
 }
 
-function deleteLure(id){
-  if(!confirm('Delete this lure?'))return;
-  saveLibrary(getLibrary().filter(l=>l.id!==id)); renderLibrary();
+function folderItemHTML(f, count) {
+  return `<div class="folder-item" onclick="openFolder('${f.id}')">
+    <div class="folder-icon-wrap">
+      <div class="folder-circle">
+        <div class="folder-circle-left" style="background:${f.color1};"></div>
+        <div class="folder-circle-right" style="background:${f.color2};"></div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div class="folder-name">${f.name}</div>
+      <div class="folder-count">${count} lure${count!==1?'s':''}</div>
+    </div>
+    <button class="item-del" onclick="event.stopPropagation();deleteFolder('${f.id}')" title="Delete folder">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>`;
 }
 
-function loadFromLibrary(id){
-  const lure=getLibrary().find(l=>l.id===id); if(!lure)return;
-  const img=new Image();
-  img.onload=()=>{
+function lureItemHTML(l) {
+  return `<div class="lib-lure-item" onclick="loadFromLibrary('${l.id}')">
+    <img class="lib-img" src="${l.dataURL}" alt="${l.name}">
+    <button class="item-del" onclick="event.stopPropagation();deleteLure('${l.id}')" title="Delete">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="lib-name">${l.name}</div>
+    <div class="lib-meta">${l.added}</div>
+  </div>`;
+}
+
+function openFolder(id) { currentFolderId = id; renderLibrary(); }
+
+function deleteFolder(id) {
+  if (!confirm('Delete this folder? Lures inside will move to the main library.')) return;
+  const data = getLibData();
+  data.lures.forEach(l => { if (l.folderId === id) l.folderId = null; });
+  data.folders = data.folders.filter(f => f.id !== id);
+  saveLibData(data);
+  renderLibrary();
+}
+
+function deleteLure(id) {
+  if (!confirm('Delete this lure?')) return;
+  const data = getLibData();
+  data.lures = data.lures.filter(l => l.id !== id);
+  saveLibData(data);
+  renderLibrary();
+}
+
+function loadFromLibrary(id) {
+  const data = getLibData();
+  const lure = data.lures.find(l => l.id === id);
+  if (!lure) return;
+  const img = new Image();
+  img.onload = () => {
     sourceImage=img;
     document.getElementById('dropTitle').textContent=lure.name;
     document.getElementById('dropSub').textContent=img.width+' × '+img.height;
     lureMask=null;bgColor=null;circleCenter=null;circleRadius=0;
     setupCanvases();
-    document.getElementById('modeCard').style.display='';
-    document.getElementById('condCard').style.display='';
-    document.getElementById('resultsCard').style.display='';
+    ['modeCard','condCard','resultsCard'].forEach(id=>document.getElementById(id).style.display='');
     setMode('solid');
     showPage('simulate');
   };
-  img.src=lure.dataURL;
+  img.src = lure.dataURL;
 }
+
+// ── Folder modal ──────────────────────────────────────────────────────────────
+function openFolderModal() {
+  document.getElementById('folderName').value = '';
+  document.getElementById('folderColor1').value = '#ff8c00';
+  document.getElementById('folderColor2').value = '#ff0000';
+  updateFolderPreview();
+  document.getElementById('folderModal').classList.remove('hidden');
+}
+function closeFolderModal() { document.getElementById('folderModal').classList.add('hidden'); }
+function updateFolderPreview() {
+  document.getElementById('fpLeft').style.background = document.getElementById('folderColor1').value;
+  document.getElementById('fpRight').style.background = document.getElementById('folderColor2').value;
+}
+document.getElementById('folderColor1').addEventListener('input', updateFolderPreview);
+document.getElementById('folderColor2').addEventListener('input', updateFolderPreview);
+document.getElementById('folderModal').addEventListener('click', e => { if(e.target===document.getElementById('folderModal'))closeFolderModal(); });
+
+function saveFolder() {
+  const name = document.getElementById('folderName').value.trim();
+  if (!name) { document.getElementById('folderName').focus(); return; }
+  const data = getLibData();
+  data.folders.push({
+    id: 'f_'+Date.now(),
+    name,
+    color1: document.getElementById('folderColor1').value,
+    color2: document.getElementById('folderColor2').value
+  });
+  saveLibData(data);
+  closeFolderModal();
+  showPage('library');
+}
+
+// ── Save to library modal ─────────────────────────────────────────────────────
+let selectedFolderId = null;
+
+function openSaveModal() {
+  document.getElementById('lureName').value = '';
+  selectedFolderId = currentFolderId;
+  buildFolderSelectList();
+  document.getElementById('saveModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('lureName').focus(), 100);
+}
+function closeSaveModal() { document.getElementById('saveModal').classList.add('hidden'); }
+
+function buildFolderSelectList() {
+  const data = getLibData();
+  const el = document.getElementById('folderSelectList');
+  if (!data.folders.length) {
+    el.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--text2);">No folders yet — create one in the Library tab</div>';
+    return;
+  }
+  let html = `<div class="folder-select-item${!selectedFolderId?' selected':''}" onclick="selectFolder(null)">
+    <div style="width:24px;height:24px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);flex-shrink:0;"></div>
+    <span>Main library (no folder)</span>
+  </div>`;
+  data.folders.forEach(f => {
+    html += `<div class="folder-select-item${selectedFolderId===f.id?' selected':''}" onclick="selectFolder('${f.id}')">
+      <div class="fsi-circle">
+        <div class="fsi-left" style="background:${f.color1};"></div>
+        <div class="fsi-right" style="background:${f.color2};"></div>
+      </div>
+      <span>${f.name}</span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function selectFolder(id) {
+  selectedFolderId = id;
+  buildFolderSelectList();
+}
+
+function saveToLibrary() {
+  const name = document.getElementById('lureName').value.trim() || 'Unnamed Lure';
+  const dataURL = document.getElementById('origCanvas').toDataURL('image/jpeg', 0.85);
+  const data = getLibData();
+  data.lures.unshift({
+    id: 'l_'+Date.now(), name, dataURL,
+    folderId: selectedFolderId || null,
+    added: new Date().toLocaleDateString()
+  });
+  saveLibData(data);
+  closeSaveModal();
+  currentFolderId = selectedFolderId;
+  showPage('library');
+}
+
+document.getElementById('saveModal').addEventListener('click', e => { if(e.target===document.getElementById('saveModal'))closeSaveModal(); });
+
+// ── Library quick-add from file ───────────────────────────────────────────────
+document.getElementById('libFileInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if(!file)return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const name = prompt('Name this lure:', file.name.replace(/\.[^.]+$/,''));
+    if (!name) return;
+    const data = getLibData();
+    data.lures.unshift({id:'l_'+Date.now(),name,dataURL:ev.target.result,folderId:currentFolderId||null,added:new Date().toLocaleDateString()});
+    saveLibData(data);
+    renderLibrary();
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+});
 </script>
 </body>
 </html>
