@@ -13,11 +13,11 @@
 <title>Bass Vision</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --bg:#0a1628;--bg2:#0f1f38;--bg3:#162944;
   --accent:#1d9e75;--accent2:#ff8c00;
   --text:#e8edf5;--text2:#8fa3bc;
-  --border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,.08);--card:rgba(255,255,255,.04);
   --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -58,16 +58,30 @@ input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;back
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg);}
 select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:8px 10px;-webkit-appearance:none;outline:none;}
 
-/* Results */
-.results-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+/* AI detect button */
+.ai-detect-btn{width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.ai-detect-btn:disabled{opacity:.4;cursor:not-allowed;}
+.ai-detect-btn:active:not(:disabled){opacity:.85;}
+.ai-status{font-size:12px;text-align:center;margin-top:8px;min-height:16px;color:var(--text2);}
+.ai-status.running{color:#7ab8ff;}
+.ai-status.done{color:#4ecda0;}
+.ai-status.err{color:#ff7070;}
+
+/* Results — full width single column */
+.results-stack{display:flex;flex-direction:column;gap:10px;}
 .result-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);}
-.result-canvas{width:100%;display:block;aspect-ratio:1;background:#111;}
+.result-card.bass-card{border-color:rgba(29,158,117,.3);}
+.result-canvas{width:100%;display:block;background:#111;image-rendering:high-quality;}
 .result-canvas.clickable{cursor:zoom-in;}
-.result-label{padding:6px 8px;}
-.result-title{font-size:11px;font-weight:500;}
-.result-sub{font-size:10px;color:var(--text2);margin-top:1px;}
-.dl-btn{display:block;width:100%;text-align:center;font-size:11px;padding:6px 0;border-top:1px solid var(--border);color:var(--accent);cursor:pointer;background:none;border-left:none;border-right:none;border-bottom:none;font-family:'Barlow',sans-serif;font-weight:500;}
-.dl-btn:active{background:rgba(29,158,117,.1);}
+.result-label{padding:8px 10px;display:flex;align-items:center;justify-content:space-between;}
+.result-title{font-size:12px;font-weight:500;}
+.result-sub{font-size:11px;color:var(--text2);}
+.dl-btn{font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid rgba(29,158,117,.4);background:rgba(29,158,117,.1);color:var(--accent);cursor:pointer;font-family:'Barlow',sans-serif;font-weight:500;white-space:nowrap;}
+.dl-btn:active{background:rgba(29,158,117,.2);}
+
+/* Small side-by-side for orig+water */
+.results-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
 .badge{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border);}
 .badge.ok{background:rgba(29,158,117,.15);color:#4ecda0;border-color:rgba(29,158,117,.3);}
@@ -79,55 +93,43 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
 .clear-btn{font-size:12px;color:var(--text2);background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:8px;width:100%;}
 .clear-btn:active{background:rgba(255,255,255,.06);}
 
-/* ── Lightbox ── */
-#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+/* Lightbox */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;}
 #lightbox.hidden{display:none;}
-#lightboxImg{max-width:100%;max-height:80vh;border-radius:10px;object-fit:contain;}
-#lightboxLabel{margin-top:12px;font-size:13px;color:var(--text2);}
-#lightboxClose{position:absolute;top:calc(var(--safe-top)+12px);right:16px;width:36px;height:36px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#lightboxImg{max-width:100%;max-height:82vh;border-radius:10px;object-fit:contain;}
+#lightboxLabel{margin-top:10px;font-size:13px;color:var(--text2);text-align:center;}
+#lightboxClose{position:absolute;top:calc(var(--safe-top)+12px);right:16px;width:36px;height:36px;background:rgba(255,255,255,.12);border:none;border-radius:50%;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 #lightboxSave{margin-top:14px;padding:10px 28px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
-#lightboxSave:active{opacity:.85;}
 
-/* ── Library ── */
+/* Library */
 .lib-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .lib-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;flex:1;}
 .icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);flex-shrink:0;}
 .icon-btn:active{background:rgba(255,255,255,.1);}
 .lib-empty{text-align:center;padding:48px 24px;color:var(--text2);}
 .lib-empty-sub{font-size:13px;opacity:.6;margin-top:6px;}
-
-/* Breadcrumb */
 #breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .bc-item{font-size:13px;color:var(--text2);cursor:pointer;}
 .bc-item:hover{color:var(--text);}
 .bc-item.current{color:var(--text);font-weight:500;cursor:default;}
 .bc-sep{font-size:13px;color:var(--text2);}
-
-/* Folder grid */
 .lib-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
-
-/* Folder item */
 .folder-item{border:1px solid var(--border);border-radius:12px;background:var(--card);cursor:pointer;padding:14px 12px;display:flex;align-items:center;gap:12px;position:relative;}
 .folder-item:active{opacity:.8;}
-.folder-icon-wrap{flex-shrink:0;}
-.folder-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.folder-circle{width:44px;height:44px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0;}
 .folder-circle-left{position:absolute;left:0;top:0;width:50%;height:100%;}
 .folder-circle-right{position:absolute;right:0;top:0;width:50%;height:100%;}
-.folder-circle svg{position:relative;z-index:1;}
-.folder-name{font-size:13px;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.folder-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .folder-count{font-size:11px;color:var(--text2);margin-top:2px;}
-.item-del{position:absolute;top:8px;right:8px;width:22px;height:22px;background:rgba(0,0,0,.5);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;opacity:0;}
-.folder-item:hover .item-del,.lib-lure-item:hover .item-del{opacity:1;}
-
-/* Lure item in library */
+.item-del{position:absolute;top:8px;right:8px;width:22px;height:22px;background:rgba(0,0,0,.55);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;}
 .lib-lure-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);cursor:pointer;position:relative;}
 .lib-lure-item:active{opacity:.8;}
-.lib-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#111;}
+.lib-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#111;image-rendering:high-quality;}
 .lib-name{padding:8px 10px 4px;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lib-meta{padding:0 10px 8px;font-size:11px;color:var(--text2);}
-.lib-lure-item .item-del{top:6px;right:6px;opacity:1;}
+.lib-lure-item .item-del{top:6px;right:6px;}
 
-/* ── Modals ── */
+/* Modals */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
 .modal-overlay.hidden{display:none;}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px 18px 0 0;width:100%;max-width:500px;padding:20px 16px calc(24px + var(--safe-bot));}
@@ -136,17 +138,13 @@ select{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius
 .modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
 .btn-cancel{padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text2);font-family:'Barlow',sans-serif;font-size:15px;cursor:pointer;}
 .btn-primary{padding:12px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-family:'Barlow',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
-
-/* Color pickers for folder */
 .color-pick-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.color-pick-label{font-size:13px;color:var(--text2);min-width:80px;}
+.color-pick-label{font-size:13px;color:var(--text2);min-width:70px;}
 input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);cursor:pointer;}
-.folder-preview{width:56px;height:56px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0;border:2px solid var(--border);}
+.folder-preview{width:52px;height:52px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0;border:2px solid var(--border);}
 .fp-left{position:absolute;left:0;top:0;width:50%;height:100%;}
 .fp-right{position:absolute;right:0;top:0;width:50%;height:100%;}
-
-/* Save-to-folder select */
-.folder-select-list{max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;margin-bottom:12px;}
+.folder-select-list{max-height:160px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;margin-bottom:12px;}
 .folder-select-item{padding:10px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
 .folder-select-item:last-child{border-bottom:none;}
 .folder-select-item:active{background:rgba(255,255,255,.06);}
@@ -174,7 +172,7 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
 
   <div id="content">
 
-    <!-- ══ SIMULATE PAGE ══ -->
+    <!-- ══ SIMULATE ══ -->
     <div class="page active" id="page-simulate">
 
       <div class="card">
@@ -200,8 +198,8 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
             <div class="mode-btn-sub">Tap solid background</div>
           </button>
           <button class="mode-btn" id="btnCircle" onclick="setMode('circle')">
-            <div class="mode-btn-title">Draw</div>
-            <div class="mode-btn-sub">Circle the lure</div>
+            <div class="mode-btn-title">AI Circle</div>
+            <div class="mode-btn-sub">Draw circle, AI isolates lure</div>
           </button>
           <button class="mode-btn" id="btnNone" onclick="setMode('none')">
             <div class="mode-btn-title">None</div>
@@ -210,6 +208,7 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
         </div>
       </div>
 
+      <!-- Solid sampler -->
       <div class="card" id="solidCard" style="display:none;">
         <div class="card-title">3 — Tap the background color</div>
         <div class="canvas-wrap"><canvas id="samplerCanvas"></canvas></div>
@@ -219,16 +218,23 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
           <span class="ctrl-val" id="tolVal">35</span>
           <div class="swatch-preview" id="bgSwatch"></div>
         </div>
-        <div class="hint" id="samplerHint">Tap background — blue shows what's masked</div>
+        <div class="hint" id="samplerHint">Tap background — blue tint shows masked area</div>
       </div>
 
+      <!-- AI Circle -->
       <div class="card" id="circleCard" style="display:none;">
-        <div class="card-title">3 — Draw a circle around the lure</div>
+        <div class="card-title">3 — Draw a circle around the lure, then detect</div>
         <div class="canvas-wrap"><canvas id="circleCanvas"></canvas></div>
         <div class="hint" id="circleHint">Drag to draw a circle around the lure</div>
-        <button class="clear-btn" onclick="clearCircle()">Clear circle</button>
+        <button class="ai-detect-btn" id="aiDetectBtn" onclick="runAIDetect()" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Detect lure with AI
+        </button>
+        <div class="ai-status" id="aiStatus"></div>
+        <button class="clear-btn" onclick="clearCircle()">Clear and redraw</button>
       </div>
 
+      <!-- Conditions -->
       <div class="card" id="condCard" style="display:none;">
         <div class="card-title" id="condLabel">4 — Water conditions</div>
         <div class="ctrl-row">
@@ -254,33 +260,42 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
         </div>
       </div>
 
+      <!-- Results — bass vision full width, others side by side -->
       <div class="card" id="resultsCard" style="display:none;">
-        <div class="card-title">Results — tap bass vision to enlarge</div>
-        <div class="results-grid">
-          <div class="result-card">
-            <canvas id="origCanvas" class="result-canvas"></canvas>
-            <div class="result-label">
-              <div class="result-title">Original</div>
-              <div class="result-sub">Out of water</div>
-            </div>
-            <button class="dl-btn" onclick="saveToPhotos('origCanvas','lure_original.jpg')">Save to Photos</button>
-          </div>
-          <div class="result-card">
-            <canvas id="waterCanvas" class="result-canvas"></canvas>
-            <div class="result-label">
-              <div class="result-title">Underwater</div>
-              <div class="result-sub" id="waterSub">Human view</div>
-            </div>
-            <button class="dl-btn" onclick="saveToPhotos('waterCanvas','lure_underwater.jpg')">Save to Photos</button>
-          </div>
-          <div class="result-card">
+        <div class="card-title">Results</div>
+        <div class="results-stack">
+
+          <!-- Bass vision — full width, large -->
+          <div class="result-card bass-card">
             <canvas id="bassCanvas" class="result-canvas clickable" onclick="openLightbox()"></canvas>
             <div class="result-label">
-              <div class="result-title">Bass vision <span style="font-size:10px;color:var(--accent);">tap to enlarge</span></div>
-              <div class="result-sub" id="bassSub">Fish view</div>
+              <div>
+                <div class="result-title">Bass vision <span style="font-size:10px;color:var(--accent);">· tap to enlarge</span></div>
+                <div class="result-sub" id="bassSub">Tritanopia + depth filter</div>
+              </div>
+              <button class="dl-btn" onclick="saveToPhotos('bassCanvas','lure_bass_vision.jpg')">Save to Photos</button>
             </div>
-            <button class="dl-btn" onclick="saveToPhotos('bassCanvas','lure_bass_vision.jpg')">Save to Photos</button>
           </div>
+
+          <!-- Original + Underwater side by side -->
+          <div class="results-row">
+            <div class="result-card">
+              <canvas id="origCanvas" class="result-canvas"></canvas>
+              <div class="result-label" style="flex-direction:column;align-items:flex-start;gap:4px;">
+                <div class="result-title">Original</div>
+                <button class="dl-btn" style="padding:3px 10px;font-size:11px;" onclick="saveToPhotos('origCanvas','lure_original.jpg')">Save</button>
+              </div>
+            </div>
+            <div class="result-card">
+              <canvas id="waterCanvas" class="result-canvas"></canvas>
+              <div class="result-label" style="flex-direction:column;align-items:flex-start;gap:4px;">
+                <div class="result-title">Underwater</div>
+                <div class="result-sub" id="waterSub" style="font-size:10px;"></div>
+                <button class="dl-btn" style="padding:3px 10px;font-size:11px;" onclick="saveToPhotos('waterCanvas','lure_underwater.jpg')">Save</button>
+              </div>
+            </div>
+          </div>
+
         </div>
         <div class="badges" id="badges"></div>
         <button class="save-lib-btn" onclick="openSaveModal()">
@@ -291,7 +306,7 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
 
     </div><!-- /simulate -->
 
-    <!-- ══ LIBRARY PAGE ══ -->
+    <!-- ══ LIBRARY ══ -->
     <div class="page" id="page-library">
       <div class="lib-header">
         <div class="lib-title">My Lures</div>
@@ -307,7 +322,7 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
       <div id="libContent"></div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
   <nav id="navbar">
     <button class="nav-btn active" id="nav-simulate" onclick="showPage('simulate')">
@@ -321,7 +336,7 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
   </nav>
 </div>
 
-<!-- ══ Lightbox ══ -->
+<!-- Lightbox -->
 <div id="lightbox" class="hidden">
   <button id="lightboxClose" onclick="closeLightbox()">✕</button>
   <img id="lightboxImg" src="" alt="Bass vision">
@@ -329,7 +344,7 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
   <button id="lightboxSave" onclick="lightboxSaveToPhotos()">Save to Photos</button>
 </div>
 
-<!-- ══ Save to library modal ══ -->
+<!-- Save to library modal -->
 <div class="modal-overlay hidden" id="saveModal">
   <div class="modal">
     <div class="modal-title">Save to Library</div>
@@ -343,17 +358,17 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
   </div>
 </div>
 
-<!-- ══ New folder modal ══ -->
+<!-- New folder modal -->
 <div class="modal-overlay hidden" id="folderModal">
   <div class="modal">
-    <div class="modal-title" id="folderModalTitle">New Folder</div>
-    <input type="text" id="folderName" placeholder="Folder name (e.g. Chartreuse, Red/Orange)">
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Choose two colors for the folder icon</div>
+    <div class="modal-title">New Folder</div>
+    <input type="text" id="folderName" placeholder="e.g. Chartreuse, Red/Orange">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Choose two colors for the icon</div>
     <div class="color-pick-row">
       <span class="color-pick-label">Left color</span>
       <input type="color" id="folderColor1" value="#ff8c00">
       <input type="color" id="folderColor2" value="#ff0000">
-      <span class="color-pick-label" style="text-align:center;">Right color</span>
+      <span class="color-pick-label" style="text-align:right;">Right color</span>
       <div class="folder-preview" id="folderPreview">
         <div class="fp-left" id="fpLeft" style="background:#ff8c00;"></div>
         <div class="fp-right" id="fpRight" style="background:#ff0000;"></div>
@@ -366,70 +381,63 @@ input[type=color]{width:44px;height:36px;padding:2px 3px;border-radius:8px;borde
   </div>
 </div>
 
-<!-- ══ Install banner ══ -->
+<!-- Install banner -->
 <div id="installBanner" class="hidden">
-  <div class="install-text">
-    <strong>Add to Home Screen</strong>
-    Install Bass Vision for quick access
-  </div>
+  <div class="install-text"><strong>Add to Home Screen</strong>Install Bass Vision for quick access</div>
   <button class="install-btn" id="installBtn">Install</button>
   <button class="install-close" onclick="document.getElementById('installBanner').classList.add('hidden')">✕</button>
 </div>
 
 <script>
 // ── PWA ───────────────────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
-}
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredPrompt = e;
-  document.getElementById('installBanner').classList.remove('hidden');
-});
-document.getElementById('installBtn').addEventListener('click', () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(() => { deferredPrompt = null; document.getElementById('installBanner').classList.add('hidden'); });
-});
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').classList.remove('hidden');});
+document.getElementById('installBtn').addEventListener('click',()=>{if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('installBanner').classList.add('hidden');});});
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if (name === 'library') renderLibrary();
+  if(name==='library')renderLibrary();
 }
 
 // ── Water physics ─────────────────────────────────────────────────────────────
-const waterParams = {
+const waterParams={
   clear:{ra:.038,ga:.015,ba:.006,tint:[0,2,18],clarity:1.0},
   green:{ra:.065,ga:.010,ba:.022,tint:[0,14,8],clarity:.55},
   brown:{ra:.095,ga:.032,ba:.038,tint:[14,7,0],clarity:.28}
 };
-const lightMult = {bright:1.0,overcast:.72,low:.48};
+const lightMult={bright:1.0,overcast:.72,low:.48};
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let sourceImage=null, fullResPixels=null, fullW=0, fullH=0;
+// sourceImage = original full-res Image object
+// previewW/H  = display canvas size (for circle drawing UI)
+// fullW/H     = sourceImage natural size (used for all filter output)
+let sourceImage=null, previewW=0, previewH=0, fullW=0, fullH=0;
 let lureMask=null, bgColor=null, currentMode='solid';
 let circleCenter=null, circleRadius=0, isDrawing=false, drawStart=null;
+let previewPixels=null; // pixel data at preview scale for sampler
 
 // ── File load ─────────────────────────────────────────────────────────────────
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
+const dropZone=document.getElementById('dropZone');
+const fileInput=document.getElementById('fileInput');
 dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag');});
 dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag'));
 dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadFile(f);});
 fileInput.addEventListener('change',e=>{if(e.target.files[0])loadFile(e.target.files[0]);});
 
-function loadFile(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
+function loadFile(file){
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
       sourceImage=img;
+      fullW=img.naturalWidth; fullH=img.naturalHeight;
       document.getElementById('dropTitle').textContent=file.name;
-      document.getElementById('dropSub').textContent=img.width+' × '+img.height;
+      document.getElementById('dropSub').textContent=img.naturalWidth+' × '+img.naturalHeight;
       lureMask=null;bgColor=null;circleCenter=null;circleRadius=0;
       setupCanvases();
       ['modeCard','condCard','resultsCard'].forEach(id=>document.getElementById(id).style.display='');
@@ -440,131 +448,330 @@ function loadFile(file) {
   reader.readAsDataURL(file);
 }
 
-// ── Canvases ──────────────────────────────────────────────────────────────────
-function setupCanvases() {
+// ── Setup canvases ────────────────────────────────────────────────────────────
+function setupCanvases(){
+  // Preview size for circle/sampler UI — keep small for touch accuracy
   const maxW=Math.min(window.innerWidth-64,600);
-  const scale=Math.min(maxW/sourceImage.width,320/sourceImage.height,1);
-  fullW=Math.round(sourceImage.width*scale);
-  fullH=Math.round(sourceImage.height*scale);
+  const scale=Math.min(maxW/fullW, 320/fullH, 1);
+  previewW=Math.round(fullW*scale);
+  previewH=Math.round(fullH*scale);
+
+  // Sampler canvas at preview size
   const sc=document.getElementById('samplerCanvas');
-  sc.width=fullW;sc.height=fullH;
+  sc.width=previewW; sc.height=previewH;
   const sctx=sc.getContext('2d');
-  sctx.drawImage(sourceImage,0,0,fullW,fullH);
-  fullResPixels=sctx.getImageData(0,0,fullW,fullH);
+  sctx.drawImage(sourceImage,0,0,previewW,previewH);
+  previewPixels=sctx.getImageData(0,0,previewW,previewH);
+
+  // Circle canvas at preview size
   const cc=document.getElementById('circleCanvas');
-  cc.width=fullW;cc.height=fullH;
+  cc.width=previewW; cc.height=previewH;
   redrawCircleCanvas();
 
-  function samplerTap(cx,cy) {
+  // Sampler tap
+  function samplerTap(cx,cy){
     if(currentMode!=='solid')return;
     const rect=sc.getBoundingClientRect();
-    const px=Math.round((cx-rect.left)*(fullW/rect.width));
-    const py=Math.round((cy-rect.top)*(fullH/rect.height));
-    if(px<0||py<0||px>=fullW||py>=fullH)return;
-    const idx=(py*fullW+px)*4,d=fullResPixels.data;
+    const px=Math.round((cx-rect.left)*(previewW/rect.width));
+    const py=Math.round((cy-rect.top)*(previewH/rect.height));
+    if(px<0||py<0||px>=previewW||py>=previewH)return;
+    const idx=(py*previewW+px)*4,d=previewPixels.data;
     bgColor={r:d[idx],g:d[idx+1],b:d[idx+2]};
     document.getElementById('bgSwatch').style.background=`rgb(${bgColor.r},${bgColor.g},${bgColor.b})`;
-    buildMaskSolid();processImage();
+    buildMaskSolid(); processImage();
   }
   sc.addEventListener('click',e=>samplerTap(e.clientX,e.clientY));
   sc.addEventListener('touchend',e=>{e.preventDefault();const t=e.changedTouches[0];samplerTap(t.clientX,t.clientY);},{passive:false});
+
   setupCircleDrawing();
 }
 
-// ── Circle ────────────────────────────────────────────────────────────────────
-function setupCircleDrawing() {
+// ── Circle drawing (on preview canvas) ───────────────────────────────────────
+function setupCircleDrawing(){
   const cc=document.getElementById('circleCanvas');
-  function pos(cx,cy){const r=cc.getBoundingClientRect();return{x:(cx-r.left)*(fullW/r.width),y:(cy-r.top)*(fullH/r.height)};}
-  function start(x,y){isDrawing=true;drawStart={x,y};circleCenter=null;circleRadius=0;}
+  function pos(cx,cy){const r=cc.getBoundingClientRect();return{x:(cx-r.left)*(previewW/r.width),y:(cy-r.top)*(previewH/r.height)};}
+  function start(x,y){isDrawing=true;drawStart={x,y};circleCenter=null;circleRadius=0;document.getElementById('aiDetectBtn').disabled=true;}
   function move(x,y){if(!isDrawing)return;const dx=x-drawStart.x,dy=y-drawStart.y;circleRadius=Math.sqrt(dx*dx+dy*dy)/2;circleCenter={x:drawStart.x+dx/2,y:drawStart.y+dy/2};redrawCircleCanvas();}
-  function end(){if(!isDrawing)return;isDrawing=false;if(circleCenter&&circleRadius>5){buildMaskCircle();processImage();document.getElementById('circleHint').textContent='Circle set — drag again to redraw';}}
+  function end(){
+    if(!isDrawing)return; isDrawing=false;
+    if(circleCenter&&circleRadius>5){
+      document.getElementById('aiDetectBtn').disabled=false;
+      document.getElementById('circleHint').textContent='Circle drawn — tap "Detect lure with AI"';
+      // Fallback mask = circle itself until AI runs
+      buildMaskCircle();
+      processImage();
+    }
+  }
   cc.addEventListener('mousedown',e=>{const p=pos(e.clientX,e.clientY);start(p.x,p.y);});
   cc.addEventListener('mousemove',e=>{const p=pos(e.clientX,e.clientY);move(p.x,p.y);});
-  cc.addEventListener('mouseup',end);cc.addEventListener('mouseleave',end);
+  cc.addEventListener('mouseup',end); cc.addEventListener('mouseleave',end);
   cc.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0],p=pos(t.clientX,t.clientY);start(p.x,p.y);},{passive:false});
   cc.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0],p=pos(t.clientX,t.clientY);move(p.x,p.y);},{passive:false});
   cc.addEventListener('touchend',e=>{e.preventDefault();end();},{passive:false});
 }
+
 function redrawCircleCanvas(){
   const cc=document.getElementById('circleCanvas'),ctx=cc.getContext('2d');
-  ctx.clearRect(0,0,fullW,fullH);ctx.drawImage(sourceImage,0,0,fullW,fullH);
+  ctx.clearRect(0,0,previewW,previewH);
+  ctx.drawImage(sourceImage,0,0,previewW,previewH);
   if(circleCenter&&circleRadius>0){
-    ctx.save();ctx.beginPath();ctx.rect(0,0,fullW,fullH);ctx.arc(circleCenter.x,circleCenter.y,circleRadius,0,Math.PI*2,true);ctx.fillStyle='rgba(0,0,0,.45)';ctx.fill('evenodd');ctx.restore();
-    ctx.beginPath();ctx.arc(circleCenter.x,circleCenter.y,circleRadius,0,Math.PI*2);ctx.strokeStyle='#1d9e75';ctx.lineWidth=2;ctx.setLineDash([6,4]);ctx.stroke();ctx.setLineDash([]);
+    ctx.save();
+    ctx.beginPath();ctx.rect(0,0,previewW,previewH);
+    ctx.arc(circleCenter.x,circleCenter.y,circleRadius,0,Math.PI*2,true);
+    ctx.fillStyle='rgba(0,0,0,.45)';ctx.fill('evenodd');ctx.restore();
+    ctx.beginPath();ctx.arc(circleCenter.x,circleCenter.y,circleRadius,0,Math.PI*2);
+    ctx.strokeStyle='#1d9e75';ctx.lineWidth=2;ctx.setLineDash([6,4]);ctx.stroke();ctx.setLineDash([]);
     ctx.beginPath();ctx.arc(circleCenter.x,circleCenter.y,3,0,Math.PI*2);ctx.fillStyle='#1d9e75';ctx.fill();
   }
 }
-function clearCircle(){circleCenter=null;circleRadius=0;lureMask=null;redrawCircleCanvas();document.getElementById('circleHint').textContent='Drag to draw a circle around the lure';processImage();}
-function buildMaskCircle(){
+
+function clearCircle(){
+  circleCenter=null;circleRadius=0;lureMask=null;
+  document.getElementById('aiDetectBtn').disabled=true;
+  document.getElementById('circleHint').textContent='Drag to draw a circle around the lure';
+  document.getElementById('aiStatus').textContent='';
+  document.getElementById('aiStatus').className='ai-status';
+  redrawCircleCanvas(); processImage();
+}
+
+// ── AI Detection inside circle ────────────────────────────────────────────────
+async function runAIDetect(){
   if(!circleCenter||circleRadius<=0)return;
-  lureMask=new Uint8Array(fullW*fullH);
-  const r2=circleRadius*circleRadius;
-  for(let y=0;y<fullH;y++)for(let x=0;x<fullW;x++)lureMask[y*fullW+x]=(((x-circleCenter.x)**2+(y-circleCenter.y)**2)<=r2)?1:0;
+  const btn=document.getElementById('aiDetectBtn');
+  const status=document.getElementById('aiStatus');
+  btn.disabled=true;
+  status.className='ai-status running';
+  status.textContent='Sending to AI — detecting lure outline…';
+
+  try{
+    // Crop the circle region from the source image at full res
+    // Scale circle coords back to full res
+    const scaleX=fullW/previewW, scaleY=fullH/previewH;
+    const fcx=circleCenter.x*scaleX, fcy=circleCenter.y*scaleY;
+    const fr=circleRadius*Math.max(scaleX,scaleY);
+    const cropX=Math.max(0,Math.floor(fcx-fr));
+    const cropY=Math.max(0,Math.floor(fcy-fr));
+    const cropW=Math.min(fullW-cropX,Math.ceil(fr*2));
+    const cropH=Math.min(fullH-cropY,Math.ceil(fr*2));
+
+    // Draw crop to temp canvas
+    const tmp=document.createElement('canvas');
+    tmp.width=cropW; tmp.height=cropH;
+    const tctx=tmp.getContext('2d');
+    tctx.drawImage(sourceImage,cropX,cropY,cropW,cropH,0,0,cropW,cropH);
+    const cropDataURL=tmp.toDataURL('image/jpeg',.85);
+    const base64=cropDataURL.split(',')[1];
+
+    const prompt=`You are a precise fishing lure segmentation assistant. The image shows a cropped section of a fishing lure photo.
+
+The image is ${cropW}px wide by ${cropH}px tall.
+
+Identify the fishing lure in the image and return a precise polygon outline of the lure body, including hooks, blades, tails, lips — everything that is part of the lure. Exclude background, water, hands, and anything that isn't the lure.
+
+Return ONLY valid JSON, no markdown, no explanation:
+{"points":[[x,y],[x,y],...],"found":true}
+
+Use at least 12 polygon points for accuracy. If no lure is visible return {"points":[],"found":false}.
+All coordinates must be integers within the image bounds (0 to ${cropW} for x, 0 to ${cropH} for y).`;
+
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:base64}},
+          {type:'text',text:prompt}
+        ]}]
+      })
+    });
+    const data=await res.json();
+    const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    const clean=text.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+
+    if(!parsed.found||!parsed.points||parsed.points.length<3){
+      throw new Error('No lure detected in the circled area');
+    }
+
+    // Translate polygon points back to full image coordinates
+    const fullPoints=parsed.points.map(([px,py])=>[cropX+px, cropY+py]);
+    lureMask=buildMaskFromPolygon(fullPoints, fullW, fullH);
+
+    // Also overlay the polygon on the circle canvas for preview
+    drawPolygonPreview(fullPoints, scaleX, scaleY);
+
+    processImage();
+    status.className='ai-status done';
+    status.textContent='Lure isolated successfully — adjust conditions below';
+  }catch(err){
+    status.className='ai-status err';
+    status.textContent='Could not detect lure: '+err.message+'. Circle mask used instead.';
+    // Fall back to circle mask
+    buildMaskCircle();
+    processImage();
+  }
+  btn.disabled=false;
+}
+
+function drawPolygonPreview(fullPoints, scaleX, scaleY){
+  const cc=document.getElementById('circleCanvas'),ctx=cc.getContext('2d');
+  ctx.clearRect(0,0,previewW,previewH);
+  ctx.drawImage(sourceImage,0,0,previewW,previewH);
+  // Dim outside polygon
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0,0,previewW,previewH);
+  const first=fullPoints[0];
+  ctx.moveTo(first[0]/scaleX,first[1]/scaleY);
+  fullPoints.slice(1).forEach(([fx,fy])=>ctx.lineTo(fx/scaleX,fy/scaleY));
+  ctx.closePath();
+  ctx.fillStyle='rgba(0,0,0,.45)';ctx.fill('evenodd');ctx.restore();
+  // Polygon outline
+  ctx.beginPath();
+  ctx.moveTo(first[0]/scaleX,first[1]/scaleY);
+  fullPoints.slice(1).forEach(([fx,fy])=>ctx.lineTo(fx/scaleX,fy/scaleY));
+  ctx.closePath();
+  ctx.strokeStyle='#1d9e75';ctx.lineWidth=2;ctx.stroke();
+}
+
+function buildMaskFromPolygon(points, w, h){
+  const mask=new Uint8Array(w*h);
+  const minY=Math.max(0,Math.floor(Math.min(...points.map(p=>p[1]))));
+  const maxY=Math.min(h-1,Math.ceil(Math.max(...points.map(p=>p[1]))));
+  for(let y=minY;y<=maxY;y++){
+    const ints=[];
+    for(let i=0,j=points.length-1;i<points.length;j=i++){
+      const xi=points[i][0],yi=points[i][1],xj=points[j][0],yj=points[j][1];
+      if((yi>y)!==(yj>y)) ints.push(xi+(y-yi)*(xj-xi)/(yj-yi));
+    }
+    ints.sort((a,b)=>a-b);
+    for(let k=0;k<ints.length-1;k+=2){
+      const x0=Math.max(0,Math.round(ints[k]));
+      const x1=Math.min(w-1,Math.round(ints[k+1]));
+      for(let x=x0;x<=x1;x++) mask[y*w+x]=1;
+    }
+  }
+  return mask;
 }
 
 // ── Solid mask ────────────────────────────────────────────────────────────────
 function colorDist(r1,g1,b1,r2,g2,b2){return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2);}
 function buildMaskSolid(){
   if(!bgColor)return;
-  const tol=parseInt(document.getElementById('tolSlider').value),d=fullResPixels.data;
+  const tol=parseInt(document.getElementById('tolSlider').value);
+  // Build mask at full resolution using source image
+  const tmp=document.createElement('canvas');
+  tmp.width=fullW;tmp.height=fullH;
+  const tctx=tmp.getContext('2d');
+  tctx.drawImage(sourceImage,0,0,fullW,fullH);
+  const d=tctx.getImageData(0,0,fullW,fullH).data;
   lureMask=new Uint8Array(fullW*fullH);
-  for(let i=0;i<fullW*fullH;i++){const idx=i*4;lureMask[i]=colorDist(d[idx],d[idx+1],d[idx+2],bgColor.r,bgColor.g,bgColor.b)>tol?1:0;}
+  for(let i=0;i<fullW*fullH;i++){
+    const idx=i*4;
+    lureMask[i]=colorDist(d[idx],d[idx+1],d[idx+2],bgColor.r,bgColor.g,bgColor.b)>tol?1:0;
+  }
   document.getElementById('samplerHint').textContent='Background masked — adjust tolerance to refine';
   refreshSamplerOverlay();
 }
+
 function refreshSamplerOverlay(){
   const sc=document.getElementById('samplerCanvas'),ctx=sc.getContext('2d');
-  ctx.drawImage(sourceImage,0,0,fullW,fullH);
+  ctx.drawImage(sourceImage,0,0,previewW,previewH);
   if(!lureMask)return;
-  const img=ctx.getImageData(0,0,fullW,fullH),d=img.data;
-  for(let i=0;i<fullW*fullH;i++)if(!lureMask[i]){d[i*4]=60;d[i*4+1]=140;d[i*4+2]=255;d[i*4+3]=160;}
+  // Build preview-scale overlay from full-res mask
+  const img=ctx.getImageData(0,0,previewW,previewH),d=img.data;
+  const scaleX=fullW/previewW, scaleY=fullH/previewH;
+  for(let py=0;py<previewH;py++){
+    for(let px=0;px<previewW;px++){
+      const fx=Math.round(px*scaleX), fy=Math.round(py*scaleY);
+      const fi=fy*fullW+fx;
+      if(fi<lureMask.length&&!lureMask[fi]){
+        const i=(py*previewW+px)*4;
+        d[i]=60;d[i+1]=140;d[i+2]=255;d[i+3]=160;
+      }
+    }
+  }
   ctx.putImageData(img,0,0);
+}
+
+// Circle mask at full resolution
+function buildMaskCircle(){
+  if(!circleCenter||circleRadius<=0)return;
+  const scaleX=fullW/previewW, scaleY=fullH/previewH;
+  const fcx=circleCenter.x*scaleX, fcy=circleCenter.y*scaleY;
+  const fr=circleRadius*Math.max(scaleX,scaleY);
+  lureMask=new Uint8Array(fullW*fullH);
+  for(let y=0;y<fullH;y++)
+    for(let x=0;x<fullW;x++)
+      lureMask[y*fullW+x]=(((x-fcx)**2+(y-fcy)**2)<=fr*fr)?1:0;
 }
 
 // ── Mode ──────────────────────────────────────────────────────────────────────
 function setMode(mode){
   currentMode=mode;
-  ['solid','circle','none'].forEach(m=>document.getElementById('btn'+m[0].toUpperCase()+m.slice(1)).className='mode-btn'+(m===mode?' active':''));
+  ['solid','circle','none'].forEach(m=>
+    document.getElementById('btn'+m[0].toUpperCase()+m.slice(1)).className='mode-btn'+(m===mode?' active':''));
   document.getElementById('solidCard').style.display=mode==='solid'?'':'none';
   document.getElementById('circleCard').style.display=mode==='circle'?'':'none';
   document.getElementById('condLabel').textContent=(mode==='none'?'3':'4')+' — Water conditions';
-  if(mode!=='solid'&&mode!=='circle')lureMask=null;
+  if(mode!=='solid'&&mode!=='circle'){lureMask=null;}
   if(mode==='solid')refreshSamplerOverlay();
-  if(mode==='circle')redrawCircleCanvas();
+  if(mode==='circle'){redrawCircleCanvas();document.getElementById('aiDetectBtn').disabled=!(circleCenter&&circleRadius>5);}
   processImage();
 }
 
-// ── Process ───────────────────────────────────────────────────────────────────
+// ── Process — renders at FULL SOURCE RESOLUTION ───────────────────────────────
 function processImage(){
   if(!sourceImage)return;
   const waterType=document.getElementById('waterType').value;
   const depth=parseInt(document.getElementById('depthSlider').value);
   const light=document.getElementById('lightCond').value;
   const p=waterParams[waterType],lm=lightMult[light];
-  ['origCanvas','waterCanvas','bassCanvas'].forEach(id=>{const c=document.getElementById(id);c.width=fullW;c.height=fullH;});
+
+  // All output canvases render at full source resolution
+  ['origCanvas','waterCanvas','bassCanvas'].forEach(id=>{
+    const c=document.getElementById(id);
+    c.width=fullW; c.height=fullH;
+  });
+
   const origCtx=document.getElementById('origCanvas').getContext('2d');
   origCtx.drawImage(sourceImage,0,0,fullW,fullH);
   const src=origCtx.getImageData(0,0,fullW,fullH).data;
+
   const redF=Math.exp(-p.ra*depth),greenF=Math.exp(-p.ga*depth),blueF=Math.exp(-p.ba*depth);
   const darkF=Math.max(.08,lm*Math.exp(-.016*depth));
+
   const wCtx=document.getElementById('waterCanvas').getContext('2d');
   const bCtx=document.getElementById('bassCanvas').getContext('2d');
-  const wImg=wCtx.createImageData(fullW,fullH),bImg=bCtx.createImageData(fullW,fullH);
+  const wImg=wCtx.createImageData(fullW,fullH);
+  const bImg=bCtx.createImageData(fullW,fullH);
   const wd=wImg.data,bd=bImg.data;
+
   for(let i=0;i<fullW*fullH;i++){
     const px=i*4,r=src[px],g=src[px+1],b=src[px+2],a=src[px+3];
     const isLure=!lureMask||lureMask[i]===1;
     let wr,wg,wb;
-    if(isLure){wr=r*redF*darkF+p.tint[0]*(1-redF)*lm*darkF;wg=g*greenF*darkF+p.tint[1]*(1-greenF)*lm*darkF;wb=b*blueF*darkF+p.tint[2]*(1-blueF)*lm*darkF;}
-    else{wr=r;wg=g;wb=b;}
-    wd[px]=Math.max(0,Math.min(255,wr));wd[px+1]=Math.max(0,Math.min(255,wg));wd[px+2]=Math.max(0,Math.min(255,wb));wd[px+3]=a;
+    if(isLure){
+      wr=r*redF*darkF+p.tint[0]*(1-redF)*lm*darkF;
+      wg=g*greenF*darkF+p.tint[1]*(1-greenF)*lm*darkF;
+      wb=b*blueF*darkF+p.tint[2]*(1-blueF)*lm*darkF;
+    }else{wr=r;wg=g;wb=b;}
+    wd[px]=Math.max(0,Math.min(255,wr));wd[px+1]=Math.max(0,Math.min(255,wg));
+    wd[px+2]=Math.max(0,Math.min(255,wb));wd[px+3]=a;
     let br,bg_,bb;
-    if(isLure){br=.95*wr+.05*wg;bg_=.43*wg+.57*wb;bb=.48*wg+.52*wb;}else{br=r;bg_=g;bb=b;}
-    bd[px]=Math.max(0,Math.min(255,br));bd[px+1]=Math.max(0,Math.min(255,bg_));bd[px+2]=Math.max(0,Math.min(255,bb));bd[px+3]=a;
+    if(isLure){br=.95*wr+.05*wg;bg_=.43*wg+.57*wb;bb=.48*wg+.52*wb;}
+    else{br=r;bg_=g;bb=b;}
+    bd[px]=Math.max(0,Math.min(255,br));bd[px+1]=Math.max(0,Math.min(255,bg_));
+    bd[px+2]=Math.max(0,Math.min(255,bb));bd[px+3]=a;
   }
-  wCtx.putImageData(wImg,0,0);bCtx.putImageData(bImg,0,0);
+  wCtx.putImageData(wImg,0,0);
+  bCtx.putImageData(bImg,0,0);
+
   document.getElementById('waterSub').textContent=depth+' ft · '+waterType;
-  document.getElementById('bassSub').textContent='Tritanopia · '+depth+' ft';
+  document.getElementById('bassSub').textContent='Tritanopia · '+depth+' ft · '+waterType;
+
   const effDepth=depth/(p.clarity*lm);
   let visCls='ok',visLabel='Good visibility';
   if(effDepth>20){visCls='warn';visLabel='Very poor visibility';}
@@ -572,8 +779,13 @@ function processImage(){
   else if(effDepth>5){visCls='';visLabel='Moderate visibility';}
   const redGone=depth>{clear:9,green:5,brown:3}[waterType];
   const lightLabel={bright:'Bright sun',overcast:'Overcast',low:'Low light'}[light];
-  const maskBadge=lureMask?(currentMode==='circle'?'<span class="badge ok">Circle mask</span>':'<span class="badge ok">Color mask</span>'):'<span class="badge info">Full image filtered</span>';
-  document.getElementById('badges').innerHTML=maskBadge+`<span class="badge ${visCls}">${visLabel}</span>`+(redGone?'<span class="badge warn">Red absorbed</span>':'')+`<span class="badge">${depth} ft · ${waterType} · ${lightLabel}</span>`;
+  const maskLabel=lureMask
+    ?(currentMode==='circle'?'<span class="badge ok">AI circle mask</span>':'<span class="badge ok">Color mask</span>')
+    :'<span class="badge info">Full image filtered</span>';
+  document.getElementById('badges').innerHTML=
+    maskLabel+`<span class="badge ${visCls}">${visLabel}</span>`+
+    (redGone?'<span class="badge warn">Red absorbed</span>':'')+
+    `<span class="badge">${depth} ft · ${waterType} · ${lightLabel}</span>`;
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────
@@ -582,284 +794,177 @@ document.getElementById('tolSlider').addEventListener('input',function(){documen
 document.getElementById('waterType').addEventListener('change',processImage);
 document.getElementById('lightCond').addEventListener('change',processImage);
 
-// ── Save to Photos (iPhone-friendly) ─────────────────────────────────────────
-function saveToPhotos(canvasId, filename) {
-  const canvas = document.getElementById(canvasId);
-  const dataURL = canvas.toDataURL('image/jpeg', 0.95);
-  // On iOS Safari, opening a data URL in a new tab lets user long-press to save to Photos
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (isIOS) {
-    // Create a full-screen image page the user can long-press to save
-    const w = window.open('', '_blank');
-    if (w) {
-      w.document.write(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>${filename}</title><style>body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;}img{max-width:100%;max-height:100vh;}</style></head><body><img src="${dataURL}" alt="${filename}"></body></html>`);
+// ── Save to Photos ────────────────────────────────────────────────────────────
+function saveToPhotos(canvasId,filename){
+  const canvas=document.getElementById(canvasId);
+  const dataURL=canvas.toDataURL('image/jpeg',.95);
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+  if(isIOS){
+    const w=window.open('','_blank');
+    if(w){
+      w.document.write(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>${filename}</title><style>body{margin:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;}img{max-width:100%;max-height:90vh;}p{color:#fff;font-family:sans-serif;font-size:14px;margin-top:12px;opacity:.7;}</style></head><body><img src="${dataURL}"><p>Long-press image → Add to Photos</p></body></html>`);
       w.document.close();
-    } else {
-      // Popup blocked fallback
-      iosPhotoFallback(dataURL, filename);
-    }
-  } else {
-    // Desktop / Android — direct download
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = dataURL;
-    link.click();
+    }else{iosPhotoFallback(dataURL);}
+  }else{
+    const a=document.createElement('a');a.download=filename;a.href=dataURL;a.click();
   }
 }
-
-function iosPhotoFallback(dataURL, filename) {
-  // Show the image in lightbox with instructions
-  document.getElementById('lightboxImg').src = dataURL;
-  document.getElementById('lightboxLabel').textContent = 'Long-press the image and tap "Add to Photos"';
-  document.getElementById('lightboxSave').style.display = 'none';
+function iosPhotoFallback(dataURL){
+  document.getElementById('lightboxImg').src=dataURL;
+  document.getElementById('lightboxLabel').textContent='Long-press the image → Add to Photos';
+  document.getElementById('lightboxSave').style.display='none';
   document.getElementById('lightbox').classList.remove('hidden');
 }
 
 // ── Lightbox ──────────────────────────────────────────────────────────────────
-function openLightbox() {
-  const canvas = document.getElementById('bassCanvas');
-  const dataURL = canvas.toDataURL('image/jpeg', 0.95);
-  document.getElementById('lightboxImg').src = dataURL;
-  const depth = document.getElementById('depthSlider').value;
-  const waterType = document.getElementById('waterType').value;
-  document.getElementById('lightboxLabel').textContent = 'Bass vision · ' + depth + ' ft · ' + waterType;
-  document.getElementById('lightboxSave').style.display = '';
+function openLightbox(){
+  const canvas=document.getElementById('bassCanvas');
+  document.getElementById('lightboxImg').src=canvas.toDataURL('image/jpeg',.96);
+  document.getElementById('lightboxLabel').textContent='Bass vision · '+document.getElementById('depthSlider').value+' ft · '+document.getElementById('waterType').value;
+  document.getElementById('lightboxSave').style.display='';
   document.getElementById('lightbox').classList.remove('hidden');
 }
-function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
-function lightboxSaveToPhotos() { saveToPhotos('bassCanvas','lure_bass_vision.jpg'); }
-document.getElementById('lightbox').addEventListener('click', e => { if(e.target===document.getElementById('lightbox'))closeLightbox(); });
+function closeLightbox(){document.getElementById('lightbox').classList.add('hidden');}
+function lightboxSaveToPhotos(){saveToPhotos('bassCanvas','lure_bass_vision.jpg');}
+document.getElementById('lightbox').addEventListener('click',e=>{if(e.target===document.getElementById('lightbox'))closeLightbox();});
 
-// ── Library storage ───────────────────────────────────────────────────────────
-function getLibData() {
-  try { return JSON.parse(localStorage.getItem('bassVision_v3') || '{"folders":[],"lures":[]}'); }
-  catch { return {folders:[],lures:[]}; }
-}
-function saveLibData(data) {
-  try { localStorage.setItem('bassVision_v3', JSON.stringify(data)); }
-  catch { alert('Storage full — try deleting some lures.'); }
-}
+// ── Library ───────────────────────────────────────────────────────────────────
+function getLibData(){try{return JSON.parse(localStorage.getItem('bassVision_v3')||'{"folders":[],"lures":[]}');}catch{return{folders:[],lures:[]};}}
+function saveLibData(data){try{localStorage.setItem('bassVision_v3',JSON.stringify(data));}catch{alert('Storage full.');}}
 
-// ── Current folder in library ─────────────────────────────────────────────────
-let currentFolderId = null; // null = root
+let currentFolderId=null;
+let selectedFolderId=null;
 
-// ── Render library ────────────────────────────────────────────────────────────
-function renderLibrary() {
-  const data = getLibData();
-  const bc = document.getElementById('breadcrumb');
-  const el = document.getElementById('libContent');
-
-  // Breadcrumb
-  if (currentFolderId) {
-    const folder = data.folders.find(f => f.id === currentFolderId);
-    bc.style.display = 'flex';
-    bc.innerHTML = `
-      <span class="bc-item" onclick="currentFolderId=null;renderLibrary()">My Lures</span>
-      <span class="bc-sep">›</span>
-      <span class="bc-item current">${folder ? folder.name : '—'}</span>`;
-  } else {
-    bc.style.display = 'none';
-  }
-
-  if (currentFolderId) {
-    // Inside a folder — show lures in that folder
-    const lures = data.lures.filter(l => l.folderId === currentFolderId);
-    if (!lures.length) {
-      el.innerHTML = `<div class="lib-empty"><div style="font-size:40px;margin-bottom:10px;opacity:.4;">🎣</div><div style="font-size:15px;font-weight:500;color:var(--text2);">No lures in this folder</div><div class="lib-empty-sub">Save a lure here from the Simulate tab</div></div>`;
-      return;
-    }
-    el.innerHTML = `<div class="lib-grid">${lures.map(l => lureItemHTML(l)).join('')}</div>`;
+function renderLibrary(){
+  const data=getLibData();
+  const bc=document.getElementById('breadcrumb');
+  const el=document.getElementById('libContent');
+  if(currentFolderId){
+    const folder=data.folders.find(f=>f.id===currentFolderId);
+    bc.style.display='flex';
+    bc.innerHTML=`<span class="bc-item" onclick="currentFolderId=null;renderLibrary()">My Lures</span><span class="bc-sep">›</span><span class="bc-item current">${folder?folder.name:'—'}</span>`;
+    const lures=data.lures.filter(l=>l.folderId===currentFolderId);
+    if(!lures.length){el.innerHTML=`<div class="lib-empty"><div style="font-size:40px;margin-bottom:10px;opacity:.4;">🎣</div><div style="font-size:15px;font-weight:500;color:var(--text2);">No lures in this folder</div><div class="lib-empty-sub">Save a lure here from the Simulate tab</div></div>`;return;}
+    el.innerHTML=`<div class="lib-grid">${lures.map(l=>lureItemHTML(l)).join('')}</div>`;
     return;
   }
-
-  // Root — show folders first, then unfoldered lures
-  const folders = data.folders;
-  const rootLures = data.lures.filter(l => !l.folderId);
-
-  if (!folders.length && !rootLures.length) {
-    el.innerHTML = `<div class="lib-empty"><div style="font-size:48px;margin-bottom:12px;opacity:.4;">🎣</div><div style="font-size:15px;font-weight:500;color:var(--text2);">No lures saved yet</div><div class="lib-empty-sub">Simulate a lure and tap "Save to library"<br>or use the + button to add a photo directly</div></div>`;
+  bc.style.display='none';
+  const folders=data.folders;
+  const rootLures=data.lures.filter(l=>!l.folderId);
+  if(!folders.length&&!rootLures.length){
+    el.innerHTML=`<div class="lib-empty"><div style="font-size:48px;margin-bottom:12px;opacity:.4;">🎣</div><div style="font-size:15px;font-weight:500;color:var(--text2);">No lures saved yet</div><div class="lib-empty-sub">Simulate a lure and save it here,<br>or tap + to add a photo directly</div></div>`;
     return;
   }
-
-  let html = '<div class="lib-grid">';
-  folders.forEach(f => {
-    const count = data.lures.filter(l => l.folderId === f.id).length;
-    html += folderItemHTML(f, count);
-  });
-  rootLures.forEach(l => { html += lureItemHTML(l); });
-  html += '</div>';
-  el.innerHTML = html;
+  let html='<div class="lib-grid">';
+  folders.forEach(f=>{const count=data.lures.filter(l=>l.folderId===f.id).length;html+=folderItemHTML(f,count);});
+  rootLures.forEach(l=>{html+=lureItemHTML(l);});
+  html+='</div>';
+  el.innerHTML=html;
 }
 
-function folderItemHTML(f, count) {
+function folderItemHTML(f,count){
   return `<div class="folder-item" onclick="openFolder('${f.id}')">
-    <div class="folder-icon-wrap">
-      <div class="folder-circle">
-        <div class="folder-circle-left" style="background:${f.color1};"></div>
-        <div class="folder-circle-right" style="background:${f.color2};"></div>
-      </div>
-    </div>
-    <div style="flex:1;min-width:0;">
-      <div class="folder-name">${f.name}</div>
-      <div class="folder-count">${count} lure${count!==1?'s':''}</div>
-    </div>
-    <button class="item-del" onclick="event.stopPropagation();deleteFolder('${f.id}')" title="Delete folder">
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </button>
+    <div class="folder-circle"><div class="folder-circle-left" style="background:${f.color1};"></div><div class="folder-circle-right" style="background:${f.color2};"></div></div>
+    <div style="flex:1;min-width:0;"><div class="folder-name">${f.name}</div><div class="folder-count">${count} lure${count!==1?'s':''}</div></div>
+    <button class="item-del" onclick="event.stopPropagation();deleteFolder('${f.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></button>
   </div>`;
 }
-
-function lureItemHTML(l) {
+function lureItemHTML(l){
   return `<div class="lib-lure-item" onclick="loadFromLibrary('${l.id}')">
     <img class="lib-img" src="${l.dataURL}" alt="${l.name}">
-    <button class="item-del" onclick="event.stopPropagation();deleteLure('${l.id}')" title="Delete">
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </button>
-    <div class="lib-name">${l.name}</div>
-    <div class="lib-meta">${l.added}</div>
+    <button class="item-del" onclick="event.stopPropagation();deleteLure('${l.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1l-8 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    <div class="lib-name">${l.name}</div><div class="lib-meta">${l.added}</div>
   </div>`;
 }
 
-function openFolder(id) { currentFolderId = id; renderLibrary(); }
-
-function deleteFolder(id) {
-  if (!confirm('Delete this folder? Lures inside will move to the main library.')) return;
-  const data = getLibData();
-  data.lures.forEach(l => { if (l.folderId === id) l.folderId = null; });
-  data.folders = data.folders.filter(f => f.id !== id);
-  saveLibData(data);
-  renderLibrary();
+function openFolder(id){currentFolderId=id;renderLibrary();}
+function deleteFolder(id){
+  if(!confirm('Delete folder? Lures will move to main library.'))return;
+  const data=getLibData();
+  data.lures.forEach(l=>{if(l.folderId===id)l.folderId=null;});
+  data.folders=data.folders.filter(f=>f.id!==id);
+  saveLibData(data);renderLibrary();
 }
-
-function deleteLure(id) {
-  if (!confirm('Delete this lure?')) return;
-  const data = getLibData();
-  data.lures = data.lures.filter(l => l.id !== id);
-  saveLibData(data);
-  renderLibrary();
+function deleteLure(id){
+  if(!confirm('Delete this lure?'))return;
+  const data=getLibData();data.lures=data.lures.filter(l=>l.id!==id);saveLibData(data);renderLibrary();
 }
-
-function loadFromLibrary(id) {
-  const data = getLibData();
-  const lure = data.lures.find(l => l.id === id);
-  if (!lure) return;
-  const img = new Image();
-  img.onload = () => {
-    sourceImage=img;
+function loadFromLibrary(id){
+  const data=getLibData();const lure=data.lures.find(l=>l.id===id);if(!lure)return;
+  const img=new Image();
+  img.onload=()=>{
+    sourceImage=img;fullW=img.naturalWidth;fullH=img.naturalHeight;
     document.getElementById('dropTitle').textContent=lure.name;
-    document.getElementById('dropSub').textContent=img.width+' × '+img.height;
+    document.getElementById('dropSub').textContent=img.naturalWidth+' × '+img.naturalHeight;
     lureMask=null;bgColor=null;circleCenter=null;circleRadius=0;
     setupCanvases();
     ['modeCard','condCard','resultsCard'].forEach(id=>document.getElementById(id).style.display='');
-    setMode('solid');
-    showPage('simulate');
+    setMode('solid');showPage('simulate');
   };
-  img.src = lure.dataURL;
+  img.src=lure.dataURL;
 }
 
 // ── Folder modal ──────────────────────────────────────────────────────────────
-function openFolderModal() {
-  document.getElementById('folderName').value = '';
-  document.getElementById('folderColor1').value = '#ff8c00';
-  document.getElementById('folderColor2').value = '#ff0000';
+function openFolderModal(){
+  document.getElementById('folderName').value='';
+  document.getElementById('folderColor1').value='#ff8c00';
+  document.getElementById('folderColor2').value='#ff0000';
   updateFolderPreview();
   document.getElementById('folderModal').classList.remove('hidden');
 }
-function closeFolderModal() { document.getElementById('folderModal').classList.add('hidden'); }
-function updateFolderPreview() {
-  document.getElementById('fpLeft').style.background = document.getElementById('folderColor1').value;
-  document.getElementById('fpRight').style.background = document.getElementById('folderColor2').value;
+function closeFolderModal(){document.getElementById('folderModal').classList.add('hidden');}
+function updateFolderPreview(){
+  document.getElementById('fpLeft').style.background=document.getElementById('folderColor1').value;
+  document.getElementById('fpRight').style.background=document.getElementById('folderColor2').value;
 }
-document.getElementById('folderColor1').addEventListener('input', updateFolderPreview);
-document.getElementById('folderColor2').addEventListener('input', updateFolderPreview);
-document.getElementById('folderModal').addEventListener('click', e => { if(e.target===document.getElementById('folderModal'))closeFolderModal(); });
-
-function saveFolder() {
-  const name = document.getElementById('folderName').value.trim();
-  if (!name) { document.getElementById('folderName').focus(); return; }
-  const data = getLibData();
-  data.folders.push({
-    id: 'f_'+Date.now(),
-    name,
-    color1: document.getElementById('folderColor1').value,
-    color2: document.getElementById('folderColor2').value
-  });
-  saveLibData(data);
-  closeFolderModal();
-  showPage('library');
+document.getElementById('folderColor1').addEventListener('input',updateFolderPreview);
+document.getElementById('folderColor2').addEventListener('input',updateFolderPreview);
+document.getElementById('folderModal').addEventListener('click',e=>{if(e.target===document.getElementById('folderModal'))closeFolderModal();});
+function saveFolder(){
+  const name=document.getElementById('folderName').value.trim();
+  if(!name){document.getElementById('folderName').focus();return;}
+  const data=getLibData();
+  data.folders.push({id:'f_'+Date.now(),name,color1:document.getElementById('folderColor1').value,color2:document.getElementById('folderColor2').value});
+  saveLibData(data);closeFolderModal();showPage('library');
 }
 
-// ── Save to library modal ─────────────────────────────────────────────────────
-let selectedFolderId = null;
-
-function openSaveModal() {
-  document.getElementById('lureName').value = '';
-  selectedFolderId = currentFolderId;
+// ── Save modal ────────────────────────────────────────────────────────────────
+function openSaveModal(){
+  document.getElementById('lureName').value='';
+  selectedFolderId=currentFolderId;
   buildFolderSelectList();
   document.getElementById('saveModal').classList.remove('hidden');
-  setTimeout(() => document.getElementById('lureName').focus(), 100);
+  setTimeout(()=>document.getElementById('lureName').focus(),100);
 }
-function closeSaveModal() { document.getElementById('saveModal').classList.add('hidden'); }
-
-function buildFolderSelectList() {
-  const data = getLibData();
-  const el = document.getElementById('folderSelectList');
-  if (!data.folders.length) {
-    el.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--text2);">No folders yet — create one in the Library tab</div>';
-    return;
-  }
-  let html = `<div class="folder-select-item${!selectedFolderId?' selected':''}" onclick="selectFolder(null)">
-    <div style="width:24px;height:24px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);flex-shrink:0;"></div>
-    <span>Main library (no folder)</span>
-  </div>`;
-  data.folders.forEach(f => {
-    html += `<div class="folder-select-item${selectedFolderId===f.id?' selected':''}" onclick="selectFolder('${f.id}')">
-      <div class="fsi-circle">
-        <div class="fsi-left" style="background:${f.color1};"></div>
-        <div class="fsi-right" style="background:${f.color2};"></div>
-      </div>
-      <span>${f.name}</span>
-    </div>`;
-  });
-  el.innerHTML = html;
+function closeSaveModal(){document.getElementById('saveModal').classList.add('hidden');}
+function buildFolderSelectList(){
+  const data=getLibData();const el=document.getElementById('folderSelectList');
+  if(!data.folders.length){el.innerHTML='<div style="padding:10px 14px;font-size:13px;color:var(--text2);">No folders yet — create one in Library</div>';return;}
+  let html=`<div class="folder-select-item${!selectedFolderId?' selected':''}" onclick="selectFolder(null)"><div style="width:24px;height:24px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);flex-shrink:0;"></div><span>Main library</span></div>`;
+  data.folders.forEach(f=>{html+=`<div class="folder-select-item${selectedFolderId===f.id?' selected':''}" onclick="selectFolder('${f.id}')"><div class="fsi-circle"><div class="fsi-left" style="background:${f.color1};"></div><div class="fsi-right" style="background:${f.color2};"></div></div><span>${f.name}</span></div>`;});
+  el.innerHTML=html;
 }
-
-function selectFolder(id) {
-  selectedFolderId = id;
-  buildFolderSelectList();
+function selectFolder(id){selectedFolderId=id;buildFolderSelectList();}
+function saveToLibrary(){
+  const name=document.getElementById('lureName').value.trim()||'Unnamed Lure';
+  const dataURL=document.getElementById('origCanvas').toDataURL('image/jpeg',.85);
+  const data=getLibData();
+  data.lures.unshift({id:'l_'+Date.now(),name,dataURL,folderId:selectedFolderId||null,added:new Date().toLocaleDateString()});
+  saveLibData(data);closeSaveModal();currentFolderId=selectedFolderId;showPage('library');
 }
+document.getElementById('saveModal').addEventListener('click',e=>{if(e.target===document.getElementById('saveModal'))closeSaveModal();});
 
-function saveToLibrary() {
-  const name = document.getElementById('lureName').value.trim() || 'Unnamed Lure';
-  const dataURL = document.getElementById('origCanvas').toDataURL('image/jpeg', 0.85);
-  const data = getLibData();
-  data.lures.unshift({
-    id: 'l_'+Date.now(), name, dataURL,
-    folderId: selectedFolderId || null,
-    added: new Date().toLocaleDateString()
-  });
-  saveLibData(data);
-  closeSaveModal();
-  currentFolderId = selectedFolderId;
-  showPage('library');
-}
-
-document.getElementById('saveModal').addEventListener('click', e => { if(e.target===document.getElementById('saveModal'))closeSaveModal(); });
-
-// ── Library quick-add from file ───────────────────────────────────────────────
-document.getElementById('libFileInput').addEventListener('change', e => {
-  const file = e.target.files[0]; if(!file)return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const name = prompt('Name this lure:', file.name.replace(/\.[^.]+$/,''));
-    if (!name) return;
-    const data = getLibData();
+// ── Library quick add ─────────────────────────────────────────────────────────
+document.getElementById('libFileInput').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const name=prompt('Name this lure:',file.name.replace(/\.[^.]+$/,''));if(!name)return;
+    const data=getLibData();
     data.lures.unshift({id:'l_'+Date.now(),name,dataURL:ev.target.result,folderId:currentFolderId||null,added:new Date().toLocaleDateString()});
-    saveLibData(data);
-    renderLibrary();
+    saveLibData(data);renderLibrary();
   };
-  reader.readAsDataURL(file);
-  e.target.value='';
+  reader.readAsDataURL(file);e.target.value='';
 });
 </script>
 </body>
